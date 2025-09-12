@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Kutish - AI Chatbot Platform{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-body text-center p-5">
+                    <i class="fas fa-clock text-warning" style="font-size: 5rem;"></i>
+                    <h2 class="mt-4 mb-3">Hisobingiz tasdiqlanmoqda</h2>
+                    <p class="lead text-muted mb-4">
+                        Sizning so'rovingiz admin tomonidan ko'rib chiqilmoqda. 
+                        Iltimos, biroz kuting.
+                    </p>
+                    
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Eslatma:</strong> Tasdiq jarayoni odatda 24 soat ichida amalga oshiriladi.
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="{{ url_for('main.logout') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-sign-out-alt me-2"></i>Chiqish
+                        </a>
+                        <button onclick="location.reload()" class="btn btn-primary ms-2">
+                            <i class="fas fa-refresh me-2"></i>Yangilash
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

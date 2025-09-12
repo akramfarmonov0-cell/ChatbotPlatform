@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}Chat - AI Chatbot Platform{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    <div class="row h-100">
+        <div class="col-12">
+            <div class="card shadow h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-robot me-2"></i>AI Chat Assistant
+                        <span class="badge bg-light text-dark ms-2">Online</span>
+                    </h5>
+                </div>
+                
+                <div class="card-body d-flex flex-column p-0" style="height: 70vh;">
+                    <!-- Chat Messages Area -->
+                    <div id="chatMessages" class="flex-grow-1 p-3 overflow-auto">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Salom! Men sizga yordam berish uchun tayyorman. Savolingizni yozing.
+                        </div>
+                    </div>
+                    
+                    <!-- Chat Input Area -->
+                    <div class="border-top p-3">
+                        <form id="chatForm" class="d-flex">
+                            <input type="text" 
+                                   id="messageInput" 
+                                   class="form-control me-2" 
+                                   placeholder="Xabaringizni yozing..." 
+                                   autocomplete="off"
+                                   required>
+                            <button type="submit" class="btn btn-primary" id="sendBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Modal -->
+<div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-4">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Yuklanmoqda...</span>
+                </div>
+                <p class="mb-0">AI javob tayyorlamoqda...</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatForm = document.getElementById('chatForm');
+    const messageInput = document.getElementById('messageInput');
+    const chatMessages = document.getElementById('chatMessages');
+    const sendBtn = document.getElementById('sendBtn');
+    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
+
+    // Load chat history on page load
+    loadChatHistory();
+
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const message = messageInput.value.trim();
+        if (!message) return;
+
+        // Add user message to chat
+        addMessage('user', message);
+        
+        // Clear input and show loading
+        messageInput.value = '';
+        sendBtn.disabled = true;
+        loadingModal.show();
+
+        // Send message to backend
+        fetch('/chat/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: message })
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingModal.hide();
+            sendBtn.disabled = false;
+            
+            if (data.reply) {
+                addMessage('bot', data.reply);
+            } else if (data.error) {
+                addMessage('error', data.error);
+            }
+        })
+        .catch(error => {
+            loadingModal.hide();
+            sendBtn.disabled = false;
+            addMessage('error', 'Xatolik yuz berdi. Qaytadan urinib ko\'ring.');
+            console.error('Error:', error);
+        });
+    });
+
+    function addMessage(type, content) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `mb-3 ${type === 'user' ? 'text-end' : ''}`;
+        
+        let badgeClass = 'bg-primary';
+        let icon = 'fas fa-user';
+        
+        if (type === 'bot') {
+            badgeClass = 'bg-success';
+            icon = 'fas fa-robot';
+        } else if (type === 'error') {
+            badgeClass = 'bg-danger';
+            icon = 'fas fa-exclamation-circle';
+        }
+
+        messageDiv.innerHTML = `
+            <div class="d-inline-block max-width-75 ${type === 'user' ? 'bg-primary text-white' : 'bg-light'} rounded p-3">
+                <div class="small mb-1">
+                    <span class="badge ${badgeClass}">
+                        <i class="${icon} me-1"></i>
+                        ${type === 'user' ? 'Siz' : type === 'bot' ? 'AI' : 'Xatolik'}
+                    </span>
+                </div>
+                <div>${content}</div>
+            </div>
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function loadChatHistory() {
+        fetch('/chat/history')
+            .then(response => response.json())
+            .then(history => {
+                history.forEach(item => {
+                    addMessage('user', item.user);
+                    addMessage('bot', item.bot);
+                });
+            })
+            .catch(error => console.error('Error loading history:', error));
+    }
+
+    // Auto-focus on input
+    messageInput.focus();
+});
+</script>
+
+<style>
+.max-width-75 {
+    max-width: 75%;
+}
+
+#chatMessages {
+    background-color: #f8f9fa;
+}
+
+#chatMessages::-webkit-scrollbar {
+    width: 6px;
+}
+
+#chatMessages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#chatMessages::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+#chatMessages::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+</style>
+{% endblock %}
