@@ -1,6 +1,20 @@
 from datetime import datetime
 from models.user import db
 
+class Message(db.Model):
+    """Suhbat xabarlari modeli"""
+    __tablename__ = 'messages'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'), nullable=False)
+    role = db.Column(db.String(10), nullable=False)  # user, assistant
+    content = db.Column(db.Text, nullable=False)
+    metadata = db.Column(db.JSON)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    conversation = db.relationship('Conversation', backref='messages')
+
 class Conversation(db.Model):
     """Barcha platformalar uchun umumiy suhbat modeli"""
     __tablename__ = 'conversations'

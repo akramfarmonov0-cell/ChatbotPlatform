@@ -242,7 +242,8 @@ def get_conversation_messages(conversation_id):
     if not conversation:
         return jsonify({'success': False, 'error': 'Suhbat topilmadi'}), 404
     
-    messages = Message.query.filter_by(conversation_id=conversation_id)\\\n        .order_by(Message.created_at.asc()).all()
+    messages = Message.query.filter_by(conversation_id=conversation_id) \
+        .order_by(Message.created_at.asc()).all()
     
     result = []
     for msg in messages:
@@ -286,7 +287,8 @@ def knowledge_base():
     """Knowledge base boshqaruvi"""
     user = User.query.get(session['user_id'])
     
-    knowledge_files = KnowledgeBase.query.filter_by(user_id=user.id)\\\n        .order_by(KnowledgeBase.created_at.desc()).all()
+    knowledge_files = KnowledgeBase.query.filter_by(user_id=user.id) \
+        .order_by(KnowledgeBase.created_at.desc()).all()
     
     return render_template('dashboard/knowledge.html', 
                          user=user,
