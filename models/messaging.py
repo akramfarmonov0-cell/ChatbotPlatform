@@ -9,7 +9,7 @@ class MessagingPlatform(db.Model):
     __tablename__ = 'messaging_platforms'
     
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
     platform_type = db.Column(db.String(20), nullable=False)  # telegram, whatsapp, instagram
     platform_name = db.Column(db.String(100), nullable=False)
     is_active = db.Column(db.Boolean, default=False)
@@ -36,7 +36,7 @@ class TelegramBot(db.Model):
     __tablename__ = 'telegram_bots'
     
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
     bot_name = db.Column(db.String(100), nullable=False)
     encrypted_token = db.Column(db.Text, nullable=False)  # Encrypted bot token
     webhook_url = db.Column(db.String(500))
@@ -71,7 +71,7 @@ class WhatsAppAccount(db.Model):
     __tablename__ = 'whatsapp_accounts'
     
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
     business_name = db.Column(db.String(100), nullable=False)
     encrypted_app_id = db.Column(db.Text, nullable=False)
     encrypted_app_secret = db.Column(db.Text, nullable=False)
@@ -121,7 +121,7 @@ class InstagramAccount(db.Model):
     __tablename__ = 'instagram_accounts'
     
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
     account_name = db.Column(db.String(100), nullable=False)
     encrypted_access_token = db.Column(db.Text, nullable=False)
     page_id = db.Column(db.String(50), nullable=False)
@@ -203,14 +203,14 @@ class PlanRequest(db.Model):
     __tablename__ = 'plan_requests'
     
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
     requested_plan = db.Column(db.String(20), default='monthly')  # monthly, quarterly, annual
     message = db.Column(db.Text)
     coupon_code = db.Column(db.String(50))
     status = db.Column(db.String(20), default='pending')  # pending, approved, rejected
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     processed_at = db.Column(db.DateTime)
-    processed_by = db.Column(db.Integer, db.ForeignKey('user.id'))  # Admin user
+    processed_by = db.Column(db.String(36), db.ForeignKey('user.id'))  # Admin user
     
     # Relationships
     user = db.relationship('User', backref='plan_requests', foreign_keys=[user_id])

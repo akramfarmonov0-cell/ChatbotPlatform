@@ -9,7 +9,7 @@ class AIConfig(db.Model):
     __tablename__ = 'ai_configs'
     
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
     ai_provider = db.Column(db.String(20), default='gemini')  # gemini, openai
     encrypted_openai_api_key = db.Column(db.Text)  # shifrlangan
     use_openai = db.Column(db.Boolean, default=False)

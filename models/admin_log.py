@@ -6,7 +6,7 @@ class AdminLog(db.Model):
     __tablename__ = 'admin_logs'
     
     id = db.Column(db.Integer, primary_key=True)
-    admin_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    admin_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
     action = db.Column(db.String(100), nullable=False)  # user_banned, plan_approved, coupon_created, etc.
     target_type = db.Column(db.String(50))  # user, coupon, plan_request, conversation
     target_id = db.Column(db.Integer)  # ID of the target object

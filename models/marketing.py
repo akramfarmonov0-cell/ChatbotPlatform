@@ -8,7 +8,7 @@ class MarketingMessage(db.Model):
     __tablename__ = 'marketing_messages'
     
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
     message_type = db.Column(db.String(20), default='trial_reminder')  # trial_reminder, plan_expired, welcome
     subject = db.Column(db.String(200), nullable=False)
     message = db.Column(db.Text, nullable=False)
@@ -71,7 +71,7 @@ class Coupon(db.Model):
     is_active = db.Column(db.Boolean, default=True)
     usage_limit = db.Column(db.Integer, default=100)  # nechta marta ishlatish mumkin
     used_count = db.Column(db.Integer, default=0)
-    created_by = db.Column(db.Integer, db.ForeignKey('user.id'))  # Admin user
+    created_by = db.Column(db.String(36), db.ForeignKey('user.id'))  # Admin user
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     expires_at = db.Column(db.DateTime)
     
@@ -138,7 +138,7 @@ class CouponUsage(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     coupon_id = db.Column(db.Integer, db.ForeignKey('coupons.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
     used_at = db.Column(db.DateTime, default=datetime.utcnow)
     plan_request_id = db.Column(db.Integer, db.ForeignKey('plan_requests.id'))
     
