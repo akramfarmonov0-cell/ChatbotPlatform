@@ -3,7 +3,7 @@ from models.user import db
 
 class KnowledgeBase(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
     file_name = db.Column(db.String(200), nullable=False)
     file_path = db.Column(db.String(500), nullable=False)  # uploads/knowledge/user_id/filename
     content = db.Column(db.Text, nullable=False)  # faqat matn — PDF/DOCX dan olingan

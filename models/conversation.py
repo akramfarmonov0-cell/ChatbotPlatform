@@ -20,7 +20,7 @@ class Conversation(db.Model):
     __tablename__ = 'conversations'
     
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
     title = db.Column(db.String(100))  # Chat title for dashboard
     platform = db.Column(db.String(20), nullable=True, default='dashboard')  # telegram, whatsapp, instagram, dashboard
     sender_id = db.Column(db.String(100), nullable=True)  # mijoz ID
