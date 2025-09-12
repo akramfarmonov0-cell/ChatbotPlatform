@@ -14,3 +14,4 @@ httpx==0.25.2
 cryptography
 pyTelegramBotAPI
 requests-oauthlib
+psycopg2-binary
