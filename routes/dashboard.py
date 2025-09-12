@@ -8,8 +8,10 @@ from models.knowledge_base import KnowledgeBase
 from models.messaging import MessagingPlatform, PlatformCredentials
 from utils.ai_handler import AIHandler
 from utils.crypto_utils import CryptoUtils
+from utils.file_parser import FileParser
 from datetime import datetime, timedelta
 import uuid
+import os
 from functools import wraps
 
 dashboard_bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
@@ -313,3 +315,121 @@ def settings():
     user = User.query.get(session['user_id'])
     
     return render_template('dashboard/settings.html', user=user)
+
+@dashboard_bp.route('/upload-knowledge', methods=['POST'])
+@login_required
+def upload_knowledge():
+    """Bilimlar bazasiga fayl yuklash"""
+    try:
+        user = User.query.get(session['user_id'])
+        
+        if 'file' not in request.files:
+            return jsonify({'success': False, 'error': 'Fayl tanlanmagan'}), 400
+        
+        file = request.files['file']
+        
+        # Faylni saqlash
+        save_result = FileParser.save_uploaded_file(file, user.id)
+        
+        if not save_result['success']:
+            return jsonify({'success': False, 'error': save_result['error']}), 400
+        
+        # Faylni parse qilish
+        file_type = save_result['filename'].rsplit('.', 1)[1].lower()
+        parse_result = FileParser.parse_file(save_result['file_path'], file_type)
+        
+        if not parse_result['success']:
+            # Parse qila olmasak, faylni o'chiramiz
+            FileParser.delete_file(save_result['file_path'])
+            return jsonify({'success': False, 'error': parse_result['error']}), 400
+        
+        # Ma'lumotlar bazasiga saqlash
+        knowledge_file = KnowledgeBase(
+            user_id=user.id,
+            file_name=save_result['filename'],
+            file_path=save_result['file_path'],
+            content=parse_result['content'],
+            file_size=save_result['file_size'],
+            file_type=file_type,
+            uploaded_at=datetime.utcnow(),
+            is_active=True
+        )
+        
+        db.session.add(knowledge_file)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Fayl muvaffaqiyatli yuklandi',
+            'file': {
+                'id': knowledge_file.id,
+                'name': knowledge_file.file_name,
+                'type': knowledge_file.file_type,
+                'size': knowledge_file.file_size,
+                'uploaded_at': knowledge_file.uploaded_at.isoformat()
+            }
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': 'Fayl yuklashda server xatosi yuz berdi'}), 500
+
+@dashboard_bp.route('/knowledge/<int:file_id>', methods=['DELETE'])
+@login_required
+def delete_knowledge(file_id):
+    """Bilimlar bazasidan faylni o'chirish"""
+    try:
+        user = User.query.get(session['user_id'])
+        
+        knowledge_file = KnowledgeBase.query.filter_by(id=file_id, user_id=user.id).first()
+        if not knowledge_file:
+            return jsonify({'success': False, 'error': 'Fayl topilmadi'}), 404
+        
+        # Fizik faylni o'chirish
+        if os.path.exists(knowledge_file.file_path):
+            FileParser.delete_file(knowledge_file.file_path)
+        
+        # Ma'lumotlar bazasidan o'chirish
+        db.session.delete(knowledge_file)
+        db.session.commit()
+        
+        return jsonify({'success': True, 'message': 'Fayl muvaffaqiyatli o\'chirildi'})
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': 'Fayl o\'chirishda xato yuz berdi'}), 500
+
+@dashboard_bp.route('/knowledge/<int:file_id>/view')
+@login_required
+def view_knowledge(file_id):
+    """Fayl mazmunini ko'rish"""
+    user = User.query.get(session['user_id'])
+    
+    knowledge_file = KnowledgeBase.query.filter_by(id=file_id, user_id=user.id).first()
+    if not knowledge_file:
+        return "Fayl topilmadi", 404
+    
+    # Fayl mazmunini HTML formatda ko'rsatish
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>{knowledge_file.file_name}</title>
+        <meta charset="utf-8">
+        <style>
+            body {{ font-family: Arial, sans-serif; margin: 20px; }}
+            .header {{ background: #f8f9fa; padding: 10px; border-radius: 5px; margin-bottom: 20px; }}
+            .content {{ white-space: pre-wrap; line-height: 1.6; }}
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h3>{knowledge_file.file_name}</h3>
+            <p>Turi: {knowledge_file.file_type.upper()} | Hajmi: {knowledge_file.file_size // 1024} KB | Yuklangan: {knowledge_file.uploaded_at.strftime('%d.%m.%Y %H:%M')}</p>
+        </div>
+        <div class="content">{knowledge_file.content}</div>
+    </body>
+    </html>
+    """
+    
+    return html_content

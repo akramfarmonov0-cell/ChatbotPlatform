@@ -4,7 +4,7 @@ expertMode = true
 
 [nix]
 channel = "stable-25_05"
-packages = ["cargo", "glibcLocales", "libiconv", "libxcrypt", "openssl", "pkg-config", "rustc"]
+packages = ["cargo", "file", "freetype", "glibcLocales", "gumbo", "harfbuzz", "jbig2dec", "libiconv", "libjpeg_turbo", "libxcrypt", "mupdf", "openjpeg", "openssl", "pkg-config", "rustc", "swig", "xcbuild"]
 
 [workflows]
 runButton = "Project"
@@ -35,12 +35,12 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 42759
-externalPort = 3000
+localPort = 33397
+externalPort = 3001
 
 [[ports]]
-localPort = 45549
-externalPort = 3002
+localPort = 42759
+externalPort = 3000
 
 [deployment]
 deploymentTarget = "autoscale"
