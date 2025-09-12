@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Kirish{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>Tizimga kirish</h4>
+                </div>
+                <div class="card-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Telefon raqam</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" 
+                                   placeholder="+998 XX XXX XX XX" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Parol</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Kirish</button>
+                        </div>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <a href="/register">Hisobingiz yo'qmi? Ro'yxatdan o'ting</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Bog'lanish{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="display-4 fw-bold text-primary mb-4">Biz Bilan Bog'laning</h1>
+            <p class="lead mb-4">Savollaringiz bormi? Biz yordam berishga tayyormiz!</p>
+            
+            <form>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label">Ism</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Telefon raqam</label>
+                    <input type="tel" class="form-control" id="phone" placeholder="+998 XX XXX XX XX">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="subject" class="form-label">Mavzu</label>
+                    <select class="form-select" id="subject">
+                        <option>Umumiy savol</option>
+                        <option>Texnik yordam</option>
+                        <option>To'lov masalalari</option>
+                        <option>Yangi xususiyat taklifi</option>
+                        <option>Boshqa</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="message" class="form-label">Xabar</label>
+                    <textarea class="form-control" id="message" rows="5" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-lg">Xabar Yuborish</button>
+            </form>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Bog'lanish Ma'lumotlari</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-envelope text-primary me-2"></i>
+                        <strong>Email:</strong><br>
+                        support@aichatbot.uz
+                    </div>
+                    
+                    <div class="mb-3">
+                        <i class="fas fa-phone text-success me-2"></i>
+                        <strong>Telefon:</strong><br>
+                        +998 XX XXX XX XX
+                    </div>
+                    
+                    <div class="mb-3">
+                        <i class="fas fa-clock text-info me-2"></i>
+                        <strong>Ish vaqti:</strong><br>
+                        24/7 onlayn qo'llab-quvvatlash
+                    </div>
+                    
+                    <div class="mb-3">
+                        <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                        <strong>Manzil:</strong><br>
+                        Toshkent, O'zbekiston
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Tez-tez So'raladigan Savollar</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <strong>Q:</strong> Trial muddat qancha?<br>
+                        <small class="text-muted">A: 3 kun bepul sinov muddati</small>
+                    </div>
+                    <div class="mb-2">
+                        <strong>Q:</strong> To'lovni qaytarish mumkinmi?<br>
+                        <small class="text-muted">A: Ha, 30 kun ichida</small>
+                    </div>
+                    <div class="mb-2">
+                        <strong>Q:</strong> Qancha platform qo'llab-quvvatlanadi?<br>
+                        <small class="text-muted">A: Telegram, WhatsApp, Instagram</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

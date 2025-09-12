@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Xususiyatlar - AI Chatbot SaaS{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary">Platform Xususiyatlari</h1>
+        <p class="lead">AI chatbot platformamizning kuchli imkoniyatlari</p>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-robot fa-3x text-primary mb-3"></i>
+                    <h4>AI Javoblar</h4>
+                    <p>Gemini va OpenAI texnologiyalari bilan aqlli va aniq javoblar beruvchi chatbot yarating.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-comments fa-3x text-success mb-3"></i>
+                    <h4>Multi-Platform</h4>
+                    <p>Telegram, WhatsApp va Instagram platformalarida bir vaqtning o'zida ishlash imkoniyati.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-brain fa-3x text-info mb-3"></i>
+                    <h4>Knowledge Base</h4>
+                    <p>O'z ma'lumotlaringiz bilan AI ni o'rgating va maxsus javoblar olish imkoniyati.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
+                    <h4>Analytics</h4>
+                    <p>Detallı statistika va hisobotlar orqali chatbot faoliyatini kuzating.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-shield-alt fa-3x text-danger mb-3"></i>
+                    <h4>Xavfsizlik</h4>
+                    <p>Yuqori darajadagi xavfsizlik va ma'lumotlar himoyasi kafolati.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-headset fa-3x text-secondary mb-3"></i>
+                    <h4>24/7 Qo'llab-quvvatlash</h4>
+                    <p>Doimo mavjud texnik yordam va maslahat xizmati.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-center mt-5">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Bepul sinab ko'ring</a>
+    </div>
+</div>
+{% endblock %}

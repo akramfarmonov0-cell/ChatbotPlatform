@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Ro'yxatdan o'tish{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>Ro'yxatdan o'tish</h4>
+                    <p class="mb-0 text-muted">3 kunlik bepul sinov boshlang</p>
+                </div>
+                <div class="card-body">
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label">To'liq ism</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Telefon raqam</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" 
+                                   placeholder="+998 XX XXX XX XX" required>
+                            <div class="form-text">O'zbekiston telefon raqamini kiriting</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Parol</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                            <div class="form-text">Kamida 6 ta belgi</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="confirm_password" class="form-label">Parolni tasdiqlash</label>
+                            <input type="password" class="form-control" id="confirm_password" 
+                                   name="confirm_password" required>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>Ro'yxatdan o'tish
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <a href="{{ url_for('auth.login') }}">Allaqachon hisobingiz bormi? Kirish</a>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-gift me-2"></i>
+                        <strong>3 kunlik bepul sinov:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li>100 ta xabar/kun</li>
+                            <li>Barcha AI xususiyatlari</li>
+                            <li>1 ta messaging platform</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = {
+        full_name: formData.get('full_name'),
+        phone: formData.get('phone'),
+        password: formData.get('password'),
+        confirm_password: formData.get('confirm_password')
+    };
+    
+    const button = this.querySelector('button[type="submit"]');
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Qayta ishlanmoqda...';
+    button.disabled = true;
+    
+    try {
+        const response = await fetch('/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Ro\'yxatdan o\'tish muvaffaqiyatli! Admin tasdiqini kuting.');
+            window.location.href = '/auth/login';
+        } else {
+            alert('Xato: ' + (result.errors ? result.errors.join(', ') : result.error));
+        }
+    } catch (error) {
+        alert('Server bilan aloqa xatosi');
+    }
+    
+    button.innerHTML = originalText;
+    button.disabled = false;
+});
+</script>
+{% endblock %}

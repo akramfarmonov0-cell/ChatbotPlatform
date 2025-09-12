@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Trial Muddati Tugagan{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <i class="fas fa-clock fa-5x text-warning mb-4"></i>
+            <h1 class="display-4 fw-bold text-danger mb-4">Trial Muddati Tugagan</h1>
+            <p class="lead mb-4">3 kunlik bepul sinov muddatingiz tugadi. Xizmatdan foydalanishni davom ettirish uchun to'lov rejasini tanlang.</p>
+            
+            <div class="alert alert-info">
+                <strong>Eslatma:</strong> Barcha ma'lumotlaringiz saqlanib qoladi va to'lov qilganingizdan so'ng qayta tiklanadi.
+            </div>
+            
+            <div class="mt-4">
+                <a href="{{ url_for('main.pricing') }}" class="btn btn-primary btn-lg me-3">To'lov Rejalarini Ko'rish</a>
+                <a href="{{ url_for('main.contact') }}" class="btn btn-outline-secondary btn-lg">Yordam</a>
+            </div>
+            
+            <hr class="my-5">
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <i class="fas fa-save fa-2x text-primary mb-3"></i>
+                    <h5>Ma'lumotlar Saqlanadi</h5>
+                    <p>Barcha suhbatlar va sozlamalar saqlanib qoladi</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-rocket fa-2x text-success mb-3"></i>
+                    <h5>Tezda Qayta Boshlash</h5>
+                    <p>To'lov qilganingizdan so'ng darhol ishlay boshlaysiz</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-headset fa-2x text-info mb-3"></i>
+                    <h5>24/7 Qo'llab-quvvatlash</h5>
+                    <p>Har qanday savollar uchun biz doimo tayyormiz</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

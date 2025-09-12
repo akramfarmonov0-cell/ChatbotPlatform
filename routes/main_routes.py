@@ -63,7 +63,7 @@ def register():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('main.index'))
+    return redirect(url_for('main.home'))
 
 @main_bp.route('/chat')
 @login_required
@@ -74,7 +74,7 @@ def chat():
     # Check trial period
     if not current_user.is_trial_active():
         flash('Trial muddatingiz tugagan. Admin bilan bog\'laning.')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.home'))
     
     return render_template('chat.html')
 
@@ -119,7 +119,7 @@ def knowledge():
     # Check trial period
     if not current_user.is_trial_active():
         flash('Trial muddatingiz tugagan. Admin bilan bog\'laning.')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.home'))
         
     if request.method == 'POST':
         text = request.form.get('text', '').strip()

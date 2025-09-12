@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Narxlar - AI Chatbot SaaS{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary">Narxlar</h1>
+        <p class="lead">O'zingizga mos rejani tanlang</p>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header text-center bg-light">
+                    <h4>Bepul Trial</h4>
+                    <h2 class="text-primary">$0<small class="text-muted">/3 kun</small></h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>100 ta xabar/kun</li>
+                        <li><i class="fas fa-check text-success me-2"></i>1 ta platform</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Basic AI responses</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Knowledge base (1MB)</li>
+                    </ul>
+                    <div class="text-center">
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary">Boshlash</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-primary">
+                <div class="card-header text-center bg-primary text-white">
+                    <h4>Pro</h4>
+                    <h2>$29<small>/oy</small></h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>10,000 ta xabar/oy</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Barcha platformalar</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Advanced AI + Custom</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Knowledge base (100MB)</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Analytics</li>
+                    </ul>
+                    <div class="text-center">
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Tanlash</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header text-center bg-dark text-white">
+                    <h4>Enterprise</h4>
+                    <h2>$99<small>/oy</small></h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Unlimited xabarlar</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Custom integrations</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Priority support</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Unlimited storage</li>
+                        <li><i class="fas fa-check text-success me-2"></i>White-label</li>
+                    </ul>
+                    <div class="text-center">
+                        <a href="{{ url_for('main.contact') }}" class="btn btn-dark">Bog'lanish</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

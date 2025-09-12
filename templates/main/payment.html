@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}To'lov{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>To'lov Qilish</h4>
+                </div>
+                <div class="card-body">
+                    {% if user and user.is_trial %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Trial Muddati:</strong> {{ trial_info.days_left if trial_info else 0 }} kun qoldi
+                    </div>
+                    {% endif %}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Tanlangan Reja:</h5>
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">Pro Reja</h6>
+                                    <h4 class="text-primary">$29 <small class="text-muted">/oy</small></h4>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>10,000 ta xabar/oy</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Barcha platformalar</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>AI features</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Analytics</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h5>To'lov Usuli:</h5>
+                            <form id="paymentForm">
+                                <div class="mb-3">
+                                    <label class="form-label">To'lov usulini tanlang:</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment_method" id="card" value="card" checked>
+                                        <label class="form-check-label" for="card">
+                                            <i class="fas fa-credit-card me-2"></i>Bank Kartasi
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment_method" id="paypal" value="paypal">
+                                        <label class="form-check-label" for="paypal">
+                                            <i class="fab fa-paypal me-2"></i>PayPal
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment_method" id="crypto" value="crypto">
+                                        <label class="form-check-label" for="crypto">
+                                            <i class="fab fa-bitcoin me-2"></i>Cryptocurrency
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div id="cardForm" class="payment-form">
+                                    <div class="mb-3">
+                                        <label for="cardNumber" class="form-label">Karta raqami</label>
+                                        <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="expiryDate" class="form-label">Muddati</label>
+                                            <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="cvv" class="form-label">CVV</label>
+                                            <input type="text" class="form-control" id="cvv" placeholder="123">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="cardName" class="form-label">Karta egasining ismi</label>
+                                        <input type="text" class="form-control" id="cardName" placeholder="John Doe">
+                                    </div>
+                                </div>
+                                
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-lock me-2"></i>$29 To'lash
+                                    </button>
+                                </div>
+                                
+                                <div class="text-center mt-3">
+                                    <small class="text-muted">
+                                        <i class="fas fa-shield-alt me-1"></i>
+                                        Barcha to'lovlar SSL himoyasi bilan amalga oshiriladi
+                                    </small>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="{{ url_for('main.pricing') }}" class="btn btn-outline-secondary">Boshqa Rejalar</a>
+                <a href="{{ url_for('main.contact') }}" class="btn btn-link">Yordam Kerakmi?</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('paymentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Simulate payment processing
+    const button = this.querySelector('button[type="submit"]');
+    const originalText = button.innerHTML;
+    
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Qayta ishlanmoqda...';
+    button.disabled = true;
+    
+    setTimeout(() => {
+        alert('To\'lov muvaffaqiyatli amalga oshirildi! Endi barcha xususiyatlardan foydalanishingiz mumkin.');
+        window.location.href = '/dashboard';
+    }, 2000);
+});
+
+// Payment method switching
+document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        document.querySelectorAll('.payment-form').forEach(form => {
+            form.style.display = 'none';
+        });
+        
+        if (this.value === 'card') {
+            document.getElementById('cardForm').style.display = 'block';
+        } else {
+            // Show appropriate payment form for other methods
+            const placeholder = document.createElement('div');
+            placeholder.className = 'alert alert-info';
+            placeholder.innerHTML = `<i class="fas fa-info-circle me-2"></i>${this.value} to'lov usuli tez orada qo'shiladi.`;
+            
+            const cardForm = document.getElementById('cardForm');
+            cardForm.style.display = 'none';
+            if (!cardForm.nextElementSibling || !cardForm.nextElementSibling.classList.contains('alert')) {
+                cardForm.parentNode.insertBefore(placeholder, cardForm.nextSibling);
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

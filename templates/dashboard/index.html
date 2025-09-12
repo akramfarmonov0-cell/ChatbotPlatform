@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Menyu</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/chat">Chat</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/knowledge-base">Knowledge Base</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/platforms">Platformalar</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Dashboard</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5>Suhbatlar</h5>
+                                    <h2 class="text-primary">{{ user_stats.total_conversations or 0 }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5>Xabarlar</h5>
+                                    <h2 class="text-success">{{ user_stats.total_messages or 0 }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if trial_info and trial_info.is_trial %}
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-clock"></i>
+                        Trial muddati: {{ trial_info.days_left }} kun qoldi
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

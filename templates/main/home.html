@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}AI Chatbot SaaS - Asosiy{% endblock %}
+
+{% block content %}
+<div class="hero-section py-5">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold text-primary mb-4">AI Chatbot SaaS Platform</h1>
+        <p class="lead mb-4">Telegram, WhatsApp va Instagram uchun AI chatbot yarating</p>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg me-3">Ro'yxatdan o'tish</a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg">Kirish</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="features-section py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 text-center mb-4">
+                <i class="fas fa-robot fa-3x text-primary mb-3"></i>
+                <h4>AI Javoblar</h4>
+                <p>Gemini va OpenAI bilan aqlli javoblar</p>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <i class="fas fa-comments fa-3x text-primary mb-3"></i>
+                <h4>Multi-Platform</h4>
+                <p>Telegram, WhatsApp, Instagram integratsiyasi</p>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+                <h4>Knowledge Base</h4>
+                <p>O'z ma'lumotlaringiz bilan AI ni o'rgating</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
