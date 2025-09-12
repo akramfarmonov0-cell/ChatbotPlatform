@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Bilimlar Bazasi{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-brain"></i> Bilimlar Bazasi</h2>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                    <i class="fas fa-upload"></i> Fayl Yuklash
+                </button>
+            </div>
+
+            {% if knowledge_files %}
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Fayl Nomi</th>
+                                    <th>Turi</th>
+                                    <th>Hajmi</th>
+                                    <th>Yuklangan Sana</th>
+                                    <th>Status</th>
+                                    <th>Amallar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for file in knowledge_files %}
+                                <tr>
+                                    <td><i class="fas fa-file-alt"></i> {{ file.file_name }}</td>
+                                    <td><span class="badge bg-info">{{ file.file_type.upper() }}</span></td>
+                                    <td>{{ "%.1f"|format(file.file_size/1024) }} KB</td>
+                                    <td>{{ file.uploaded_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                                    <td>
+                                        {% if file.is_active %}
+                                            <span class="badge bg-success">Faol</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Nofaol</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button class="btn btn-sm btn-outline-primary" onclick="viewContent({{ file.id }})">
+                                                <i class="fas fa-eye"></i> Ko'rish
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteFile({{ file.id }})">
+                                                <i class="fas fa-trash"></i> O'chirish
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <div class="mb-4">
+                    <i class="fas fa-brain fa-4x text-muted"></i>
+                </div>
+                <h4 class="text-muted">Bilimlar bazasi bo'sh</h4>
+                <p class="text-muted">AI chatbotingiz uchun bilimlar bazasiga fayllar yuklang</p>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                    <i class="fas fa-upload"></i> Birinchi Faylni Yuklang
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Upload Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yangi Fayl Yuklash</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Faylni tanlang</label>
+                        <input type="file" class="form-control" id="fileInput" accept=".txt,.pdf,.docx,.csv">
+                        <div class="form-text">Qo'llab-quvvatlanadigan formatlar: TXT, PDF, DOCX, CSV (Maksimal: 16MB)</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bekor qilish</button>
+                <button type="button" class="btn btn-primary" onclick="uploadFile()">Yuklash</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function uploadFile() {
+    const fileInput = document.getElementById('fileInput');
+    if (!fileInput.files[0]) {
+        alert('Fayl tanlang');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    
+    fetch('/dashboard/upload-knowledge', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Xato: ' + data.error);
+        }
+    });
+}
+
+function deleteFile(fileId) {
+    if (confirm('Faylni o\'chirishni xohlaysizmi?')) {
+        fetch(`/dashboard/knowledge/${fileId}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Xato: ' + data.error);
+            }
+        });
+    }
+}
+
+function viewContent(fileId) {
+    // Implement file content viewing
+    window.open(`/dashboard/knowledge/${fileId}/view`, '_blank');
+}
+</script>
+{% endblock %}

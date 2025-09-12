@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}Messaging Platformalar{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-comments"></i> Messaging Platformalar</h2>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPlatformModal">
+                    <i class="fas fa-plus"></i> Platform Qo'shish
+                </button>
+            </div>
+
+            {% if platforms %}
+            <div class="row">
+                {% for platform in platforms %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    {% if platform.platform_type == 'telegram' %}
+                                        <i class="fab fa-telegram-plane fa-2x text-primary"></i>
+                                    {% elif platform.platform_type == 'whatsapp' %}
+                                        <i class="fab fa-whatsapp fa-2x text-success"></i>
+                                    {% elif platform.platform_type == 'instagram' %}
+                                        <i class="fab fa-instagram fa-2x text-danger"></i>
+                                    {% else %}
+                                        <i class="fas fa-comments fa-2x text-info"></i>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {% if platform.is_active %}
+                                        <span class="badge bg-success">Faol</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">Nofaol</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <h5 class="card-title">{{ platform.platform_name }}</h5>
+                            <p class="card-text">
+                                <small class="text-muted">{{ platform.platform_type.title() }} Platform</small>
+                            </p>
+                            
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-sm btn-outline-primary" onclick="configurePlatform({{ platform.id }})">
+                                    <i class="fas fa-cog"></i> Sozlash
+                                </button>
+                                {% if platform.is_active %}
+                                    <button class="btn btn-sm btn-outline-warning" onclick="togglePlatform({{ platform.id }}, false)">
+                                        <i class="fas fa-pause"></i> To'xtatish
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-sm btn-outline-success" onclick="togglePlatform({{ platform.id }}, true)">
+                                        <i class="fas fa-play"></i> Ishga tushirish
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <div class="mb-4">
+                    <i class="fas fa-comments fa-4x text-muted"></i>
+                </div>
+                <h4 class="text-muted">Hech qanday platform ulanmagan</h4>
+                <p class="text-muted">AI chatbotingizni Telegram, WhatsApp yoki Instagram'ga ulang</p>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPlatformModal">
+                    <i class="fas fa-plus"></i> Birinchi Platformni Qo'shing
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Add Platform Modal -->
+<div class="modal fade" id="addPlatformModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yangi Platform Qo'shish</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addPlatformForm">
+                    <div class="mb-3">
+                        <label class="form-label">Platform Turi</label>
+                        <select class="form-select" id="platformType" onchange="updateForm()">
+                            <option value="">Platform tanlang</option>
+                            <option value="telegram">Telegram Bot</option>
+                            <option value="whatsapp">WhatsApp Business</option>
+                            <option value="instagram">Instagram</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Platform Nomi</label>
+                        <input type="text" class="form-control" id="platformName" placeholder="Masalan: Mening Bot">
+                    </div>
+                    
+                    <div id="telegramFields" class="d-none">
+                        <div class="mb-3">
+                            <label class="form-label">Bot Token</label>
+                            <input type="text" class="form-control" id="botToken" placeholder="1234567890:ABCdef...">
+                            <div class="form-text">@BotFather dan olingan bot token</div>
+                        </div>
+                    </div>
+                    
+                    <div id="whatsappFields" class="d-none">
+                        <div class="mb-3">
+                            <label class="form-label">Phone Number ID</label>
+                            <input type="text" class="form-control" id="phoneNumberId">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Verify Token</label>
+                            <input type="text" class="form-control" id="verifyToken">
+                        </div>
+                    </div>
+                    
+                    <div id="instagramFields" class="d-none">
+                        <div class="mb-3">
+                            <label class="form-label">Page Access Token</label>
+                            <input type="text" class="form-control" id="accessToken">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Page ID</label>
+                            <input type="text" class="form-control" id="pageId">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bekor qilish</button>
+                <button type="button" class="btn btn-primary" onclick="addPlatform()">Qo'shish</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function updateForm() {
+    const platformType = document.getElementById('platformType').value;
+    
+    // Hide all fields
+    document.getElementById('telegramFields').classList.add('d-none');
+    document.getElementById('whatsappFields').classList.add('d-none');
+    document.getElementById('instagramFields').classList.add('d-none');
+    
+    // Show relevant fields
+    if (platformType === 'telegram') {
+        document.getElementById('telegramFields').classList.remove('d-none');
+    } else if (platformType === 'whatsapp') {
+        document.getElementById('whatsappFields').classList.remove('d-none');
+    } else if (platformType === 'instagram') {
+        document.getElementById('instagramFields').classList.remove('d-none');
+    }
+}
+
+function addPlatform() {
+    const platformType = document.getElementById('platformType').value;
+    const platformName = document.getElementById('platformName').value;
+    
+    if (!platformType || !platformName) {
+        alert('Platform turi va nomini kiriting');
+        return;
+    }
+    
+    const data = {
+        platform_type: platformType,
+        platform_name: platformName
+    };
+    
+    // Add platform-specific data
+    if (platformType === 'telegram') {
+        data.bot_token = document.getElementById('botToken').value;
+    } else if (platformType === 'whatsapp') {
+        data.phone_number_id = document.getElementById('phoneNumberId').value;
+        data.verify_token = document.getElementById('verifyToken').value;
+    } else if (platformType === 'instagram') {
+        data.access_token = document.getElementById('accessToken').value;
+        data.page_id = document.getElementById('pageId').value;
+    }
+    
+    fetch('/dashboard/platforms/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Xato: ' + data.error);
+        }
+    });
+}
+
+function togglePlatform(platformId, activate) {
+    fetch(`/dashboard/platforms/${platformId}/toggle`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({active: activate})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Xato: ' + data.error);
+        }
+    });
+}
+
+function configurePlatform(platformId) {
+    // Implement platform configuration
+    window.location.href = `/dashboard/platforms/${platformId}/config`;
+}
+</script>
+{% endblock %}

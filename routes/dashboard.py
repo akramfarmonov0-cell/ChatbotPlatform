@@ -288,7 +288,7 @@ def knowledge_base():
     user = User.query.get(session['user_id'])
     
     knowledge_files = KnowledgeBase.query.filter_by(user_id=user.id) \
-        .order_by(KnowledgeBase.created_at.desc()).all()
+        .order_by(KnowledgeBase.uploaded_at.desc()).all()
     
     return render_template('dashboard/knowledge.html', 
                          user=user,
