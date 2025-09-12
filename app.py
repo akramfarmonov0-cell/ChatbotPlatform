@@ -7,10 +7,26 @@ from datetime import timedelta
 def create_app():
     """Flask ilovasi yaratish"""
     from flask import Flask
+    from flask_login import LoginManager
     from config import Config
     
     app = Flask(__name__)
     app.config.from_object(Config)
+    
+    # Flask-Login setup
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    login_manager.login_view = 'auth.login'
+    login_manager.login_message = 'Iltimos, avval tizimga kiring.'
+    
+    @login_manager.user_loader
+    def load_user(user_id):
+        """Flask-Login uchun user yuklash funksiyasi"""
+        try:
+            from models.user import User
+            return User.query.get(int(user_id))
+        except:
+            return None
     
     # Database setup
     try:
