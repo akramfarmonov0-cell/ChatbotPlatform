@@ -39,7 +39,7 @@
                             <div class="card text-center">
                                 <div class="card-body">
                                     <h5>Suhbatlar</h5>
-                                    <h2 class="text-primary">{{ user_stats.total_conversations or 0 }}</h2>
+                                    <h2 class="text-primary">{{ stats.conversations or 0 }}</h2>
                                 </div>
                             </div>
                         </div>
@@ -47,7 +47,7 @@
                             <div class="card text-center">
                                 <div class="card-body">
                                     <h5>Xabarlar</h5>
-                                    <h2 class="text-success">{{ user_stats.total_messages or 0 }}</h2>
+                                    <h2 class="text-success">{{ stats.messages or 0 }}</h2>
                                 </div>
                             </div>
                         </div>
