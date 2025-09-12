@@ -44,4 +44,4 @@ externalPort = 3000
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["gunicorn", "--bind=0.0.0.0:5000", "--reuse-port", "main:app"]
+run = ["gunicorn", "-w", "2", "-k", "gthread", "-b", "0.0.0.0:5000", "main:app", "--timeout", "120", "--log-level", "info"]

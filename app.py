@@ -39,6 +39,16 @@ def create_app():
     # Initialize i18n
     register_i18n(app)
     
+    # Validate environment for production
+    try:
+        if os.getenv('FLASK_ENV') == 'production':
+            Config.validate_environment()
+            print("Production environment validated successfully!")
+    except ValueError as e:
+        print(f"Environment validation failed: {e}")
+        if os.getenv('FLASK_ENV') == 'production':
+            raise  # Fail startup in production
+    
     print("Flask app created successfully!")
     return app
 
