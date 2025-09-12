@@ -1,0 +1,411 @@
+🔧 AI AGENT 3 GA BERILADIGAN TO‘LIQ PROMPT (REAL BUSINESS SaaS PLATFORMA UCHUN)
+Siz — AI chatbot platformasini rivojlantiruvchi professional AI sifatida ishlaysiz. Hozirgi loyiha (Flask + SQLite + Gemini) Replitda ishlaydi, lekin bu faqat prototip. Endi sizga quyidagi haqiqiy biznes loyihasini tuzish kerak — bu “O‘zbekistonda qurilayotgan, keyinchalik globalga chiqadigan, ko‘p kanallik AI bot SaaS platformasi”. Loyiha quyidagi asosiy prinsiplarga asoslanadi: 
+
+✅ LOYIHA ASOSIY MAQSADI (TUSHUNISH UCHUN):
+Foydalanuvchi bir marta bilimlar bazasini yuklab, uni Telegram, WhatsApp va Instagram’da bir vaqtning o‘zida ishlatadigan AI chatbotga aylantiradi — hech qanday qo‘shimcha kod yozmasdan. Barcha suhbatlar, mijozlar, statistika, hisob-kitob — admin panelida. Foydalanuvchi 3 kun sinovdan keyin pul to‘lashi kerak — agar to‘lamasa, avtomatik marketing habarlari yuboriladi. 
+
+✅ LOYIHA TALABLARI (HECH QANDAY QO‘SHIMCHA SO‘ROV KERAK EMAS)
+1. FOYDALANUVCHI RO‘YXATDAN O‘TISH (REGISTER)
+Forma: ism, telefon_raqam, email, parol
+Telefon raqami — O‘zbekiston formatida (+998XX XXX XX XX) — validatsiya qilinsin.
+Ro‘yxatdan o‘tgandan so‘ng — avtomatik 3 kunlik bepul sinov boshlanadi.
+Admin tomonidan manually tasdiqlash emas — avtomatik sinov muddati tugaganda “Dostupni so‘rash” tugmasi paydo bo‘ladi.
+✅ Model: 
+
+python
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+⌄
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(20), unique=True, nullable=False)  # +998...
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(200), nullable=False)
+    trial_ends_at = db.Column(db.DateTime, default=lambda: datetime.utcnow() + timedelta(days=3))
+    plan = db.Column(db.String(20), default="free")  # free, monthly, quarterly, annual
+    plan_expires_at = db.Column(db.DateTime, nullable=True)
+    is_active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    last_login = db.Column(db.DateTime, nullable=True)
+2. BILIMLAR BAZASINI YUKLASH (PDF, TXT, CSV, DOCX)
+Foydalanuvchi bir marta bilimlar bazasini yuklaydi:
+.pdf, .txt, .csv, .docx (faqat text ichiga ega bo‘lganlar)
+Yuklangan fayl — tekstga aylantiriladi → knowledge_base jadvalida saqlanadi.
+Barcha messenjerlar (Telegram, WhatsApp, Instagram) — ushbu bir xil bilim bazasidan foydalanadi.
+Faylni bir martalik yuklash — keyin o‘zgartirish mumkin (yangi yuklash — eski o‘chiriladi).
+✅ Model: 
+
+python
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+⌄
+class KnowledgeBase(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    file_name = db.Column(db.String(200))
+    file_path = db.Column(db.String(500))  # uploads/knowledge/user_id/filename
+    content = db.Column(db.Text)  # faqat matn — PDF/DOCX dan olingan
+    uploaded_at = db.Column(db.DateTime, default=datetime.utcnow)
+    is_active = db.Column(db.Boolean, default=True)
+✅ Tekst ajratish uchun kutubxonalar: 
+
+PyPDF2 (PDF)
+python-docx (DOCX)
+pandas (CSV)
+regex (TXT)
+3. 3 TA MESSANGER INTEGRATSIYASI (BIR BILIM BAZASI — UCHTA CHIQISH)
+Telegram
+Bot tokeni kiritiladi → webhook (
+/telegram/webhook/{user_id}
+)
+Foydalanuvchi
+tilni tanlaydi
+(UZ/RU/EN) — bot shu tilga javob beradi
+WhatsApp
+Meta API orqali (app_id, app_secret, phone_number_id) →
+/whatsapp/webhook
+Mijoz qaysi tilda yozsa —
+shu tilga javob beradi
+(auto-detect)
+Instagram
+Facebook Graph API →
+/instagram/webhook
+Mijoz qaysi tilda yozsa —
+shu tilga javob beradi
+(auto-detect)
+
+✅ Til aniqlash: 
+
+langdetect kutubxonasi — foydalanuvchi xabarini tekshiradi → uz, ru, en aniqlanadi.
+Telegramda — foydalanuvchi o‘zi tanlagan til (admin panelida sozlanadi).
+WhatsApp/Instagramda — AI mijozning tilini avtomatik aniqlaydi.
+✅ Model: 
+
+python
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+⌄
+⌄
+⌄
+class TelegramBot(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    token = db.Column(db.String(200))  # shifrlangan
+    username = db.Column(db.String(100))
+    language = db.Column(db.String(2), default='uz')  # uz, ru, en
+    webhook_url = db.Column(db.String(300))
+    is_active = db.Column(db.Boolean, default=False)
+
+class WhatsAppAccount(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    app_id = db.Column(db.String(100))
+    app_secret = db.Column(db.String(100))
+    phone_number_id = db.Column(db.String(50))
+    verify_token = db.Column(db.String(100))
+    is_active = db.Column(db.Boolean, default=False)
+
+class InstagramAccount(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    access_token = db.Column(db.String(200))  # shifrlangan
+    page_id = db.Column(db.String(50))
+    is_active = db.Column(db.Boolean, default=False)
+✅ Shifrlash: cryptography.fernet — tokenlar DB da shifrlangan holda saqlanadi. 
+
+4. AVTOMATIK MARKETING (BEPUL SINOVDA BO‘LGANLARGA)
+Agar foydalanuvchi 3 kunlik sinovdan keyin pullik rejani olmasa:
+Har 2 kun (54 soat) davomida avtomatik xabar yuboriladi:
+“Salom! Sizning sinov muddatingiz tugagan. 1 oylik rejani faollashtirish uchun [tugma] bosib, bizga murojaat qiling. Biz sizga 10% chegirma beramiz!” 
+Xabarlar — Email orqali yuboriladi (SMTP: Gmail).
+Foydalanuvchi "Dostupni so'rab murojaat qilish" tugmasi orqali so'rov yuboradi — admin panelda ko‘rinadi.
+Admin — foydalanuvchiga rejani manba orqali ulash (to‘lov qilgandan keyin) — plan = "monthly" va plan_expires_at = now() + 30 days.
+✅ Model: 
+
+python
+
+
+1
+2
+3
+4
+5
+6
+⌄
+class MarketingMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    message = db.Column(db.Text)
+    sent_at = db.Column(db.DateTime, default=datetime.utcnow)
+    status = db.Column(db.String(20), default='sent')  # sent, failed
+✅ Scheduler: APScheduler — har 54 soatda send_trial_reminders() funksiyasi ishlaydi. 
+
+5. ADMIN PANELI — PUXTA, PROFESSIONAL, BARCHANI BOSHQARISH UCHUN
+✅ Barcha foydalanuvchilar ro‘yxati — aktiv, bepul, pullik, bloklangan.
+✅ Foydalanuvchi tafsilotlari — telefon, email, bilim bazasi, integratsiyalar, so‘rovlar.
+✅ Mijozlar suhbatlari — har bir foydalanuvchining Telegram/WhatsApp/Instagram suhbatlari tarixi.
+✅ Foydalanuvchilarga habar yuborish — bitta xabar — barcha foydalanuvchilarga (global announcement).
+✅ Foydalanuvchilarning mijozlariga habar yuborish — admin o‘zi mijozga xabar yubora oladi (masalan, “Sizning botingizga yangi savollar qo‘shildi”).
+✅ To‘lovlar boshqaruvi — foydalanuvchiga “monthly” rejani qo‘yish, muddatini uzaytirish.
+✅ Statistika — nechta foydalanuvchi, nechta bilim bazasi, nechta suhbat, qaysi platforma eng ko‘p.
+✅ Foydalanuvchini bloklash/yopish — “Ban User” tugmasi. 
+
+✅ Model: 
+
+python
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+⌄
+class Conversation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    platform = db.Column(db.String(20))  # telegram, whatsapp, instagram
+    sender_id = db.Column(db.String(100))  # mijoz ID
+    sender_name = db.Column(db.String(100))
+    message = db.Column(db.Text)
+    reply = db.Column(db.Text)
+    language = db.Column(db.String(2))  # uz, ru, en
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+6. CHATBOT LILLARI — 3 TIL VA DUAL AI SUPPORT (GEMINI + OPENAI)
+Hozirgi AI: Google Gemini 1.5 Flash (tez, arzon, ko‘p tilli)
+Keyingi AI: OpenAI GPT-3.5 Turbo (foydalanuvchi o‘zi tokenini kiritadi)
+Admin panelida:
+“AI modelni tanlang: Geminni ishlatish (sizning kalitingiz bilan) / OpenAI ishlatish (foydalanuvchi tokenini kiritsa)” 
+✅ Model: 
+
+python
+
+
+1
+2
+3
+4
+5
+6
+⌄
+class AIConfig(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    ai_provider = db.Column(db.String(20), default='gemini')  # gemini, openai
+    openai_api_key = db.Column(db.String(200))  # shifrlangan
+    use_openai = db.Column(db.Boolean, default=False)
+✅ AI handler: 
+
+Agar use_openai == True va openai_api_key mavjud bo‘lsa — OpenAI ishlatiladi.
+Aks holda — Gemini.
+7. FAKAT REPLITDA ISHLAMAYDI — RENDER.GA DEPLOY QILINADI
+Barcha Webhook lar — public HTTPS URL talab qiladi → Replitda ishlamaydi.
+Loyiha Render.com ga deploy qilinishi uchun tayyor bo‘lishi kerak.
+Procfile va environment variables tayyor bo‘lsin.
+.env fayliga:
+
+
+1
+2
+3
+4
+5
+SECRET_KEY=...
+GEMINI_API_KEY=...
+MAIL_USERNAME=your@gmail.com
+MAIL_PASSWORD=app_password
+WEBHOOK_BASE_URL=https://your-app.onrender.com
+8. FAYLLAR STRUKTURASI (TO‘LIQ YANGI)
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+main.py
+requirements.txt
+.env
+config.py
+models/
+  ├── user.py
+  ├── knowledge_base.py
+  ├── messaging.py      ← Telegram/WhatsApp/Instagram
+  ├── conversation.py
+  ├── ai_config.py
+  └── marketing.py
+routes/
+  ├── main_routes.py
+  ├── admin_routes.py
+  └── messaging_routes.py  ← /telegram/webhook, /whatsapp/webhook, etc.
+utils/
+  ├── ai_handler.py        ← gemini + openai dual
+  ├── file_parser.py       ← pdf, docx, csv parser
+  ├── messaging/
+  │   ├── telegram.py
+  │   ├── whatsapp.py
+  │   └── instagram.py
+  └── email_sender.py      ← SMTP yuborish
+templates/
+  ├── base.html
+  ├── index.html
+  ├── register.html
+  ├── login.html
+  ├── dashboard.html
+  ├── upload_kb.html
+  ├── bots.html          ← Telegram/WhatsApp/Instagram ulash
+  ├── admin/
+  │   ├── dashboard.html
+  │   ├── users.html
+  │   ├── conversations.html
+  │   ├── announcements.html
+  │   └── stats.html
+static/
+  ├── css/
+  │   └── style.css
+  ├── js/
+  │   └── main.js
+  │   └── bot-integrations.js
+  │   └── admin-dashboard.js
+  └── uploads/
+      └── knowledge/
+          └── user_123/
+              └── manual.pdf
+9. TECHNICAL REQUIREMENTS
+Database
+SQLite (Replit), PostgreSQL (Render)
+Authentication
+Flask-Login + Werkzeug hash
+Language
+Flask-Babel (UZ/RU/EN) — barcha matnlar
+_()
+ichida
+File Upload
+Max 10MB, only .pdf, .txt, .csv, .docx
+Encryption
+Fernet for tokens & keys
+Webhooks
+POST-only, no GET for security
+Email
+SMTP (Gmail App Password)
+Scheduler
+APScheduler — har 54 soatda reminder yuborish
+Deployment
+Render.com — Procfile:
+web: gunicorn --bind 0.0.0.0:$PORT main:app
+
+10. YAKUNIY SHART:
+AI Agent 3 — ushbu barcha modullarni, fayllarni, logikani, shifrlashni, mailni, scheduler ni, webhook larni, admin panelini, ikki AI ni, 3 tilni, 3 platformani — bitta, to‘g‘ri, ishlaydigan, Replitda test qilinishi mumkin bo‘lgan, Render.ga deploy qilinishi uchun tayyor, professional SaaS platformasini tuzishi kerak.
+
+Hech qanday xato, hech qanday import error, hech qanday “undefined variable”, hech qanday “webhook not working” bo‘lmasligi kerak.
+
+Agar bitta fayl noto‘g‘ri bo‘lsa — loyihani ishga tushirmasdan oldin qayta tuzing.
+
+Loyiha — hozir O‘zbekiston uchun, lekin rus va ingliz tiliga oson moslanadigan struktura bo‘lishi kerak. 
+
+✅ NATIJA:
+Sizning AI Agent 3 — sizning haqiqiy biznes loyihangizni — 100% amalga oshirdi.
+Foydalanuvchi: 
+
+Ro‘yxatdan o‘tdi →
+PDF yukladi →
+Telegram, WhatsApp, Instagram uladi →
+3 kun sinovda ishladi →
+Keyin “Dostupni so‘rash” tugmasini bosdi →
+Admin uni “Monthly” rejaga qo‘ydi →
+Mijozlar bilan suhbat qildi →
+Admin esa barcha suhbatlarni, foydalanuvchilarni, reklama habarlarni boshqardi.
+Bu — O‘zbekistonda yaratilayotgan, globalga chiqishga tayyor, haqiqiy AI SaaS platformasi. 
