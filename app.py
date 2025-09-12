@@ -98,6 +98,14 @@ def register_blueprints(app):
         print("API Webhooks routes registered successfully!")
     except Exception as e:
         print(f"Error registering API webhooks routes: {e}")
+    
+    # Messaging routes - bot management
+    try:
+        from routes.messaging import messaging_bp
+        app.register_blueprint(messaging_bp)  
+        print("Messaging routes registered successfully!")
+    except Exception as e:
+        print(f"Error registering messaging routes: {e}")
 
 def register_error_handlers(app):
     """Xato ishlovchilarni ro'yxatga olish"""
