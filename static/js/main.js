@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeTooltips();
     initializeAnimations();
     initializeFormValidation();
+    initializeLoginForm();
+    initializeRegisterForm();
     
     // Auto-hide flash messages after 5 seconds
     setTimeout(function() {
@@ -45,6 +47,126 @@ function initializeFormValidation() {
                 event.stopPropagation();
             }
             form.classList.add('was-validated');
+        });
+    });
+}
+
+// Login form handling
+function initializeLoginForm() {
+    const loginForm = document.getElementById('loginForm');
+    if (!loginForm) return;
+    
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const phone = document.getElementById('phone').value.trim();
+        const password = document.getElementById('password').value;
+        const submitBtn = loginForm.querySelector('button[type="submit"]');
+        
+        if (!phone || !password) {
+            Utils.showToast('Telefon raqam va parol talab qilinadi', 'danger');
+            return;
+        }
+        
+        // Show loading
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Kirish...';
+        
+        // Send JSON request
+        fetch('/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                phone: phone,
+                password: password
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Utils.showToast(data.message, 'success');
+                // Redirect to appropriate page
+                setTimeout(() => {
+                    window.location.href = data.redirect_url || '/dashboard/';
+                }, 1000);
+            } else {
+                Utils.showToast(data.error || 'Kirish muvaffaqiyatsiz', 'danger');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        })
+        .catch(error => {
+            console.error('Login error:', error);
+            Utils.showToast('Tizimda xatolik yuz berdi', 'danger');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        });
+    });
+}
+
+// Register form handling
+function initializeRegisterForm() {
+    const registerForm = document.getElementById('registerForm');
+    if (!registerForm) return;
+    
+    registerForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(registerForm);
+        const data = {
+            full_name: formData.get('full_name').trim(),
+            phone: formData.get('phone').trim(),
+            password: formData.get('password'),
+            confirm_password: formData.get('confirm_password')
+        };
+        
+        const submitBtn = registerForm.querySelector('button[type="submit"]');
+        
+        if (!data.full_name || !data.phone || !data.password || !data.confirm_password) {
+            Utils.showToast('Barcha maydonlarni to\'ldiring', 'danger');
+            return;
+        }
+        
+        if (data.password !== data.confirm_password) {
+            Utils.showToast('Parollar mos kelmayapti', 'danger');
+            return;
+        }
+        
+        // Show loading
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Ro\'yxatdan o\'tish...';
+        
+        // Send JSON request
+        fetch('/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Utils.showToast(data.message, 'success');
+                // Redirect to login
+                setTimeout(() => {
+                    window.location.href = '/auth/login';
+                }, 1500);
+            } else {
+                Utils.showToast(data.error || 'Ro\'yxatdan o\'tish muvaffaqiyatsiz', 'danger');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        })
+        .catch(error => {
+            console.error('Register error:', error);
+            Utils.showToast('Tizimda xatolik yuz berdi', 'danger');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
         });
     });
 }
