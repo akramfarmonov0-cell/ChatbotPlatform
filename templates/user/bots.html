@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Bot Integrations') }} - AI Chatbot Platform{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-primary mb-4">
+                <i class="fas fa-robot me-3"></i>{{ _('Bot Integrations') }}
+            </h1>
+            
+            {% if config.IS_REPLIT %}
+            <div class="alert alert-warning mb-4">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>{{ _('Replit Environment Detected') }}</strong><br>
+                {{ _('Bot integrations require HTTPS webhooks which are not available on Replit. Please deploy your app to Render.com or Railway.app to enable bot integrations.') }}
+            </div>
+            {% endif %}
+            
+            <!-- Telegram Bot Section -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fab fa-telegram me-2"></i>{{ _('Telegram Bot') }}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% if current_user.telegram_bots %}
+                        {% for bot in current_user.telegram_bots %}
+                        <div class="bot-item border rounded p-3 mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h5 class="mb-1">{{ bot.bot_name }}</h5>
+                                    <small class="text-muted">
+                                        {{ _('Created') }}: {{ bot.created_at.strftime('%Y-%m-%d %H:%M') }}
+                                    </small>
+                                    <br>
+                                    <span class="badge {% if bot.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                        {% if bot.is_active %}{{ _('Active') }}{% else %}{{ _('Inactive') }}{% endif %}
+                                    </span>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    {% if not config.IS_REPLIT %}
+                                    <button class="btn btn-sm btn-outline-primary me-2" 
+                                            onclick="setTelegramWebhook({{ bot.id }})">
+                                        {{ _('Set Webhook') }}
+                                    </button>
+                                    {% endif %}
+                                    <button class="btn btn-sm btn-outline-danger" 
+                                            onclick="removeTelegramBot({{ bot.id }})">
+                                        {{ _('Remove') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">{{ _('No Telegram bots configured.') }}</p>
+                    {% endif %}
+                    
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#telegramModal">
+                        <i class="fas fa-plus me-2"></i>{{ _('Add Telegram Bot') }}
+                    </button>
+                </div>
+            </div>
+            
+            <!-- WhatsApp Business Section -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fab fa-whatsapp me-2"></i>{{ _('WhatsApp Business') }}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% if current_user.whatsapp_accounts %}
+                        {% for account in current_user.whatsapp_accounts %}
+                        <div class="bot-item border rounded p-3 mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h5 class="mb-1">{{ account.business_name }}</h5>
+                                    <small class="text-muted">
+                                        {{ _('Phone Number ID') }}: {{ account.phone_number_id }}
+                                    </small>
+                                    <br>
+                                    <span class="badge {% if account.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                        {% if account.is_active %}{{ _('Active') }}{% else %}{{ _('Inactive') }}{% endif %}
+                                    </span>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <button class="btn btn-sm btn-outline-danger" 
+                                            onclick="removeWhatsAppAccount({{ account.id }})">
+                                        {{ _('Remove') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">{{ _('No WhatsApp Business accounts configured.') }}</p>
+                    {% endif %}
+                    
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#whatsappModal">
+                        <i class="fas fa-plus me-2"></i>{{ _('Add WhatsApp Business') }}
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Instagram Business Section -->
+            <div class="card mb-4">
+                <div class="card-header bg-gradient text-white" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
+                    <h3 class="card-title mb-0">
+                        <i class="fab fa-instagram me-2"></i>{{ _('Instagram Business') }}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% if current_user.instagram_accounts %}
+                        {% for account in current_user.instagram_accounts %}
+                        <div class="bot-item border rounded p-3 mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h5 class="mb-1">{{ account.account_name }}</h5>
+                                    <small class="text-muted">
+                                        {{ _('Page ID') }}: {{ account.page_id }}
+                                    </small>
+                                    <br>
+                                    <span class="badge {% if account.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                        {% if account.is_active %}{{ _('Active') }}{% else %}{{ _('Inactive') }}{% endif %}
+                                    </span>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <button class="btn btn-sm btn-outline-danger" 
+                                            onclick="removeInstagramAccount({{ account.id }})">
+                                        {{ _('Remove') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">{{ _('No Instagram Business accounts configured.') }}</p>
+                    {% endif %}
+                    
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#instagramModal" 
+                            style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); border: none;">
+                        <i class="fas fa-plus me-2"></i>{{ _('Add Instagram Business') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Telegram Bot Modal -->
+<div class="modal fade" id="telegramModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ _('Add Telegram Bot') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="telegramForm">
+                    <div class="mb-3">
+                        <label for="telegram_bot_name" class="form-label">{{ _('Bot Name') }}</label>
+                        <input type="text" class="form-control" id="telegram_bot_name" required>
+                        <div class="form-text">{{ _('A friendly name for your bot') }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="telegram_bot_token" class="form-label">{{ _('Bot Token') }}</label>
+                        <input type="password" class="form-control" id="telegram_bot_token" required>
+                        <div class="form-text">{{ _('Get this from @BotFather on Telegram') }}</div>
+                    </div>
+                    <div id="telegram-validation-result"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Cancel') }}</button>
+                <button type="button" class="btn btn-primary" onclick="validateTelegramBot()">{{ _('Validate & Add') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- WhatsApp Business Modal -->
+<div class="modal fade" id="whatsappModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ _('Add WhatsApp Business') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="whatsappForm">
+                    <div class="mb-3">
+                        <label for="whatsapp_business_name" class="form-label">{{ _('Business Name') }}</label>
+                        <input type="text" class="form-control" id="whatsapp_business_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="whatsapp_app_id" class="form-label">{{ _('App ID') }}</label>
+                        <input type="text" class="form-control" id="whatsapp_app_id" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="whatsapp_app_secret" class="form-label">{{ _('App Secret') }}</label>
+                        <input type="password" class="form-control" id="whatsapp_app_secret" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="whatsapp_verify_token" class="form-label">{{ _('Verify Token') }}</label>
+                        <input type="text" class="form-control" id="whatsapp_verify_token" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="whatsapp_phone_number_id" class="form-label">{{ _('Phone Number ID') }}</label>
+                        <input type="text" class="form-control" id="whatsapp_phone_number_id" required>
+                    </div>
+                    <div id="whatsapp-validation-result"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Cancel') }}</button>
+                <button type="button" class="btn btn-success" onclick="validateWhatsAppCredentials()">{{ _('Validate & Add') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Instagram Business Modal -->
+<div class="modal fade" id="instagramModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ _('Add Instagram Business') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="instagramForm">
+                    <div class="mb-3">
+                        <label for="instagram_account_name" class="form-label">{{ _('Account Name') }}</label>
+                        <input type="text" class="form-control" id="instagram_account_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="instagram_access_token" class="form-label">{{ _('Access Token') }}</label>
+                        <input type="password" class="form-control" id="instagram_access_token" required>
+                        <div class="form-text">{{ _('Get this from Facebook Graph API') }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="instagram_page_id" class="form-label">{{ _('Page ID') }}</label>
+                        <input type="text" class="form-control" id="instagram_page_id" required>
+                    </div>
+                    <div id="instagram-validation-result"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Cancel') }}</button>
+                <button type="button" class="btn btn-primary" onclick="validateInstagramCredentials()">{{ _('Validate & Add') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/bot-integrations.js') }}"></script>
+{% endblock %}
