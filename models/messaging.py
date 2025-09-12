@@ -169,3 +169,33 @@ class InstagramConversation(db.Model):
     
     # Relationship
     account = db.relationship('InstagramAccount', backref='conversations')
+
+class PlanRequest(db.Model):
+    """Foydalanuvchilar so'rovlari - Dostupni so'rash"""
+    __tablename__ = 'plan_requests'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    requested_plan = db.Column(db.String(20), default='monthly')  # monthly, quarterly, annual
+    message = db.Column(db.Text)
+    coupon_code = db.Column(db.String(50))
+    status = db.Column(db.String(20), default='pending')  # pending, approved, rejected
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    processed_at = db.Column(db.DateTime)
+    processed_by = db.Column(db.Integer, db.ForeignKey('user.id'))  # Admin user
+    
+    # Relationships
+    user = db.relationship('User', backref='plan_requests', foreign_keys=[user_id])
+    admin = db.relationship('User', foreign_keys=[processed_by])
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'requested_plan': self.requested_plan,
+            'message': self.message,
+            'coupon_code': self.coupon_code,
+            'status': self.status,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'processed_at': self.processed_at.isoformat() if self.processed_at else None
+        }

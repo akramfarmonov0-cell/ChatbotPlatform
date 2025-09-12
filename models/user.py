@@ -29,7 +29,7 @@ class User(UserMixin, db.Model):
     @staticmethod
     def validate_uzbek_phone(phone):
         """Validate Uzbekistan phone number format: +998XX XXX XX XX"""
-        pattern = r'^\\+998[0-9]{9}$'
+        pattern = r'^\+998[0-9]{9}$'
         return re.match(pattern, phone.replace(' ', '')) is not None
     
     @property
