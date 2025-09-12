@@ -115,12 +115,20 @@
                     
                     <div id="whatsappFields" class="d-none">
                         <div class="mb-3">
+                            <label class="form-label">App ID</label>
+                            <input type="text" class="form-control" id="appId" placeholder="WhatsApp App ID">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">App Secret</label>
+                            <input type="text" class="form-control" id="appSecret" placeholder="WhatsApp App Secret">
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label">Phone Number ID</label>
-                            <input type="text" class="form-control" id="phoneNumberId">
+                            <input type="text" class="form-control" id="phoneNumberId" placeholder="Phone Number ID">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Verify Token</label>
-                            <input type="text" class="form-control" id="verifyToken">
+                            <input type="text" class="form-control" id="verifyToken" placeholder="Webhook verify token">
                         </div>
                     </div>
                     
@@ -172,23 +180,56 @@ function addPlatform() {
         return;
     }
     
-    const data = {
-        platform_type: platformType,
-        platform_name: platformName
-    };
+    let apiUrl = '';
+    let data = {};
     
-    // Add platform-specific data
+    // Platform-specific API calls
     if (platformType === 'telegram') {
-        data.bot_token = document.getElementById('botToken').value;
+        const botToken = document.getElementById('botToken').value;
+        if (!botToken) {
+            alert('Bot Token kiriting');
+            return;
+        }
+        apiUrl = '/api/bots/telegram/save';
+        data = {
+            bot_name: platformName,
+            bot_token: botToken
+        };
     } else if (platformType === 'whatsapp') {
-        data.phone_number_id = document.getElementById('phoneNumberId').value;
-        data.verify_token = document.getElementById('verifyToken').value;
+        const phoneNumberId = document.getElementById('phoneNumberId').value;
+        const verifyToken = document.getElementById('verifyToken').value;
+        const appId = document.getElementById('appId').value;
+        const appSecret = document.getElementById('appSecret').value;
+        
+        if (!phoneNumberId || !verifyToken || !appId || !appSecret) {
+            alert('Barcha WhatsApp ma\'lumotlarini kiriting');
+            return;
+        }
+        apiUrl = '/api/bots/whatsapp/save';
+        data = {
+            business_name: platformName,
+            phone_number_id: phoneNumberId,
+            verify_token: verifyToken,
+            app_id: appId,
+            app_secret: appSecret
+        };
     } else if (platformType === 'instagram') {
-        data.access_token = document.getElementById('accessToken').value;
-        data.page_id = document.getElementById('pageId').value;
+        const accessToken = document.getElementById('accessToken').value;
+        const pageId = document.getElementById('pageId').value;
+        
+        if (!accessToken || !pageId) {
+            alert('Instagram ma\'lumotlarini kiriting');
+            return;
+        }
+        apiUrl = '/api/bots/instagram/save';
+        data = {
+            account_name: platformName,
+            access_token: accessToken,
+            page_id: pageId
+        };
     }
     
-    fetch('/dashboard/platforms/add', {
+    fetch(apiUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -198,10 +239,15 @@ function addPlatform() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
+            alert('Platform muvaffaqiyatli qo\'shildi!');
             location.reload();
         } else {
-            alert('Xato: ' + data.error);
+            alert('Xato: ' + (data.error || data.message));
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ulanishda xato yuz berdi');
     });
 }
 

@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, jsonify, session, redirec
 from models.user import User, db
 from models.conversation import Conversation, Message
 from models.knowledge_base import KnowledgeBase
-from models.messaging import MessagingPlatform, PlatformCredentials
+from models.messaging import MessagingPlatform, PlatformCredentials, TelegramBot, WhatsAppAccount, InstagramAccount
 from utils.ai_handler import AIHandler
 from utils.crypto_utils import CryptoUtils
 from utils.file_parser import FileParser
@@ -302,7 +302,41 @@ def messaging_platforms():
     """Messaging platformlar boshqaruvi"""
     user = User.query.get(session['user_id'])
     
-    platforms = MessagingPlatform.query.filter_by(user_id=user.id).all()
+    # Barcha platformalarni olish
+    platforms = []
+    
+    # Telegram botlar
+    telegram_bots = TelegramBot.query.filter_by(user_id=user.id).all()
+    for bot in telegram_bots:
+        platforms.append({
+            'id': f'telegram_{bot.id}',
+            'platform_name': bot.bot_name,
+            'platform_type': 'telegram',
+            'is_active': bot.is_active,
+            'created_at': bot.created_at
+        })
+    
+    # WhatsApp akkountlar
+    whatsapp_accounts = WhatsAppAccount.query.filter_by(user_id=user.id).all()
+    for account in whatsapp_accounts:
+        platforms.append({
+            'id': f'whatsapp_{account.id}',
+            'platform_name': account.business_name,
+            'platform_type': 'whatsapp',
+            'is_active': account.is_active,
+            'created_at': account.created_at
+        })
+    
+    # Instagram akkountlar
+    instagram_accounts = InstagramAccount.query.filter_by(user_id=user.id).all()
+    for account in instagram_accounts:
+        platforms.append({
+            'id': f'instagram_{account.id}',
+            'platform_name': account.account_name,
+            'platform_type': 'instagram',
+            'is_active': account.is_active,
+            'created_at': account.created_at
+        })
     
     return render_template('dashboard/platforms.html', 
                          user=user,
