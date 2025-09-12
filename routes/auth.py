@@ -84,7 +84,7 @@ def register():
                 full_name=full_name,
                 phone=phone,
                 password_hash=CryptoUtils.hash_password(password),
-                is_active=False,  # Admin tasdiqlashini kutadi
+                is_active=True,   # Sinov foydalanuvchilari avtomatik faol
                 is_trial=True,   # 3 kunlik trial
                 trial_end_date=datetime.utcnow() + timedelta(days=3),
                 created_at=datetime.utcnow()
@@ -95,7 +95,7 @@ def register():
             
             return jsonify({
                 'success': True,
-                'message': "Ro'yxatdan o'tish muvaffaqiyatli. Admin tomonidan tasdiqlanishini kuting.",
+                'message': "Ro'yxatdan o'tish muvaffaqiyatli! 3 kunlik sinov muddati boshlandi.",
                 'trial_days': 3
             })
             
