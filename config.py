@@ -11,6 +11,22 @@ class Config:
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
     LANGUAGES = ['uz', 'ru', 'en']
     
+    # Multi-channel bot integration settings
+    WEBHOOK_BASE_URL = os.getenv('WEBHOOK_BASE_URL', 'https://your-repl-name.repl.co')
+    ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY')  # Fernet encryption key
+    
+    # Telegram Bot API settings
+    TELEGRAM_API_URL = 'https://api.telegram.org/bot'
+    
+    # WhatsApp Business API settings
+    WHATSAPP_API_URL = 'https://graph.facebook.com/v18.0'
+    
+    # Instagram Graph API settings
+    INSTAGRAM_API_URL = 'https://graph.facebook.com/v18.0'
+    
+    # Platform detection (Replit vs Production)
+    IS_REPLIT = 'REPL_ID' in os.environ
+    
     # Validate critical environment variables
     @classmethod
     def validate_environment(cls):
@@ -20,3 +36,5 @@ class Config:
                 raise ValueError("SECRET_KEY must be set in production environment")
             if not os.getenv('GEMINI_API_KEY'):
                 raise ValueError("GEMINI_API_KEY must be set in production environment")
+            if not os.getenv('ENCRYPTION_KEY'):
+                raise ValueError("ENCRYPTION_KEY must be set for secure token storage")

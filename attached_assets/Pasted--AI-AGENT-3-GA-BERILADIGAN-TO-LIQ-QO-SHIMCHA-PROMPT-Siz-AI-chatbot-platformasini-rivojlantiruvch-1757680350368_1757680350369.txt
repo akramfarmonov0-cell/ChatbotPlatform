@@ -1,0 +1,158 @@
+🔧 AI AGENT 3 GA BERILADIGAN TO‘LIQ QO‘SHIMCHA PROMPT:
+Siz AI chatbot platformasini rivojlantiruvchi AI sifatida ishlaysiz. Hozirgi loyiha (Flask + SQLite + Gemini) Replitda ishlaydi, lekin faqat veb-interfeys orqali. Endi sizga quyidagilarni qo‘shish kerak — bu loyihani “ko‘p kanallik SaaS bot platformasi”ga aylantirish uchun: 
+
+✅ MAQSAD:
+Foydalanuvchilar o‘z AI chatbotlarini Telegram, WhatsApp va Instagram’ga ulab, bitta paneldan boshqarishi mumkin bo‘lsin.
+
+🚀 QO‘SHILADIGAN FUNKSIYALAR (HAR BIRI UCHUN TIZIMLAR):
+1. TELEGRAM BOT INTEGRATSIYASI
+Har bir foydalanuvchi o‘zining Telegram botini yaratadi (BotFather orqali).
+Bot tokenini loyihada “Bot Settings” sahifasida kiritadi.
+Loyiha webhook sozlaydi → https://your-app.com/telegram/webhook/{user_id}
+Telegram xabarlarini qabul qilib, Gemini AI orqali javob beradi.
+Javobni Telegram API orqali qaytaradi.
+Barcha suhbatlar database’da saqlanadi (telegram_conversations jadvali).
+✅ Talablar: 
+
+Yangi model: TelegramBot (user_id, token, webhook_url, is_active)
+Yangi route: /telegram/webhook/<int:user_id> (POST)
+Webhook sozlash: POST /telegram/set-webhook
+Tokenni saqlash: encrypted yoki hashed (fayl emas, DB da)
+Replitda ishlamaydi — Render/Railway.ga o‘tkazilganda faollashadi
+2. WHATSAPP BUSINESS API INTEGRATSIYASI
+Foydalanuvchi Meta Developer Account orqali WhatsApp Business API ni ulash uchun:
+App ID, App Secret, Verify Token, Phone Number ID kiritadi.
+Loyiha Webhook sozlaydi: https://your-app.com/whatsapp/webhook
+Meta dan kelgan xabarlarni qabul qiladi → AI bilan javob beradi → Meta ga qaytaradi.
+Barcha xabarlar whatsapp_conversations jadvalida saqlanadi.
+✅ Talablar: 
+
+Yangi model: WhatsAppAccount (user_id, app_id, app_secret, verify_token, phone_number_id, is_active)
+Yangi route: /whatsapp/webhook (GET/POST)
+GET — challenge so‘rovi uchun (verify token tekshirish)
+POST — xabar qabul qilish, AI bilan javob berish
+Tokenlarni shifrlash (cryptography.fernet) — hech qachon oddiy holda saqlanmasin!
+3. INSTAGRAM BUSINESS API INTEGRATSIYASI
+Foydalanuvchi Facebook Graph API orqali Instagram Business accountni ulaydi.
+access_token, page_id kiritadi.
+Loyiha Webhook sozlaydi: https://your-app.com/instagram/webhook
+Xabarlar kelganda → AI javob beradi → Instagram API orqali jo‘natadi.
+✅ Talablar: 
+
+Yangi model: InstagramAccount (user_id, access_token, page_id, is_active)
+Yangi route: /instagram/webhook (GET/POST)
+GET — verification uchun
+POST — comment/message qabul qilish → AI → reply
+Barcha xabarlar instagram_conversations jadvalida saqlanadi
+🛠️ QO‘SHILADIGAN YANGI KOMPONENTLAR:
+models/messaging.py
+TelegramBot
+,
+WhatsAppAccount
+,
+InstagramAccount
+modellari
+routes/messaging.py
+Barcha
+/telegram/...
+,
+/whatsapp/...
+,
+/instagram/...
+routelari
+utils/messaging/
+Telegram/WhatsApp/Instagram API handler funksiyalari (ajratilgan)
+templates/user/bots.html
+Foydalanuvchi o‘z botlarini ulash va boshqarish uchun panel (formalar + status)
+static/js/bot-integrations.js
+Webhook sozlash uchun AJAX formalar
+config.py
+Yangi o‘zgaruvchilar:
+WEBHOOK_BASE_URL = "https://your-repl-name.repl.co"
+requirements.txt
+python-dotenv
+,
+cryptography==42.0.5
+qo‘shing
+
+🔐 XAVFSIZLIK TALABLARI:
+Barcha API kalitlar (token, secret) — shifrlangan holda (Fernet) saqlanadi.
+Har bir foydalanuvchi faqat o‘zining botlarini ko‘radi va boshqaradi.
+Webhook sozlash faqat tasdiqlangan (is_approved=True) foydalanuvchilar uchun.
+Barcha so‘rovlar HTTPS orqali — Replitda ishlamaydi, Render/Railway.ga o‘tkazilganda faol bo‘ladi.
+⚙️ REPLITDA ISHLASH HAQIDA:
+Bu yangi funksiyalar Replitda ishlamaydi, chunki:
+Replit public IP va HTTPS webhook qabul qila olmaydi.
+Lekin barcha kodlar tuzilgan bo‘lishi kerak — foydalanuvchi loyihani Render.ga ko‘chirganda avtomatik ishlay boshlasin.
+Shu sababli:
+Barcha kodlar mavjud loyihaga qo‘shiladi, lekin “Webhook sozlash” tugmachalari faol emas (Replitda “This feature requires public HTTPS URL” deb ko‘rsatiladi).
+Admin panelida “Integratsiya: Replitda ishlamaydi — Render.ga o‘ting!” degan xabar chiqsin.
+💡 FAOL QILISH UCHUN (Foydalanuvchi uchun qo‘llanma):
+👉 “Agar siz Telegram, WhatsApp yoki Instagram’ga bot ulamoqchi bo‘lsangiz: 
+
+Loyihani Render.com yoki Railway.app ga deploy qiling.
+Olingan HTTPS URL-ni (masalan: https://your-bot.onrender.com) qo‘llanma qiling.
+Telegram BotFather, Meta Business Suite, Facebook Graph API’dan kerakli kalitlarni oling.
+Platforma > Bot Settings sahifasiga kirib, kalitlarni kiriting.
+‘Set Webhook’ tugmasini bosing — bot ulanadi!*
+📁 YANGI FAULLAR STRUKTURASI (qo‘shiladiganlar):
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+models/
+  ├── user.py
+  └── messaging.py          ← YANGI: TelegramBot, WhatsAppAccount, InstagramAccount
+
+routes/
+  ├── main_routes.py
+  ├── admin_routes.py
+  └── messaging.py          ← YANGI: /telegram/webhook, /whatsapp/webhook, etc.
+
+utils/
+  ├── ai_handler.py
+  └── messaging/
+      ├── telegram.py       ← send_message(), set_webhook()
+      ├── whatsapp.py       ← handle_incoming(), verify_token()
+      └── instagram.py      ← handle_comment(), post_reply()
+
+templates/
+  ├── user/
+  │   └── bots.html         ← YANGI: Telegram/WhatsApp/Instagram ulash paneli
+
+static/
+  └── js/
+      └── bot-integrations.js ← YANGI: Webhook sozlash uchun AJAX
+
+config.py
+requirements.txt            ← cryptography qo‘shildi
+✅ YAKUNIY SHART:
+AI Agent 3 — ushbu qo‘shimcha modullarni mavjud loyihaga (17 fayl) to‘g‘ri qo‘shib, barcha yangi fayllarni to‘g‘ri tuzishi kerak.
+Hech qanday import error, hech qanday xato bo‘lmasligi kerak.
+Barcha webhooks faoliyatga ega bo‘lsin — lekin Replitda “This feature requires public HTTPS URL” deb xabar berilsin.
+Shifrlash (Fernet) to‘g‘ri bajarsin — kalitlar DB da hech qachon oddiy holda saqlanmasin.
+Admin panelida “Integrations” bo‘limi paydo bo‘lsin — foydalanuvchi ulash uchun formulalarni ko‘rsatadi. 
