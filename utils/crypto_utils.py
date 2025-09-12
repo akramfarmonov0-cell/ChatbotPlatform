@@ -39,7 +39,7 @@ class CryptoUtils:
                 return encrypted.decode()
             else:
                 # Production da fallback ruxsat etilmagan
-                if current_app.config.get('ENV') == 'production':
+                if CryptoUtils.is_production():
                     raise ValueError("ENCRYPTION_KEY talab qilinadi production muhitida")
                 
                 # Faqat development uchun base64 encoding
@@ -49,7 +49,7 @@ class CryptoUtils:
                 
         except Exception as e:
             # Production da xato bo'lsa, jarayonni to'xtatish
-            if current_app.config.get('ENV') == 'production':
+            if CryptoUtils.is_production():
                 raise e
             
             # Development da fallback
@@ -77,7 +77,7 @@ class CryptoUtils:
                 return decrypted.decode()
             else:
                 # Production da fallback ruxsat etilmagan
-                if current_app.config.get('ENV') == 'production':
+                if CryptoUtils.is_production():
                     raise ValueError("ENCRYPTION_KEY talab qilinadi production muhitida")
                 
                 # Development uchun base64 decoding
@@ -85,7 +85,7 @@ class CryptoUtils:
                 
         except Exception as e:
             # Production da xato bo'lsa, jarayonni to'xtatish
-            if current_app.config.get('ENV') == 'production':
+            if CryptoUtils.is_production():
                 raise e
             
             # Development da fallback
@@ -93,6 +93,20 @@ class CryptoUtils:
                 return base64.b64decode(encrypted_text.encode()).decode()
             except:
                 return encrypted_text  # Asl matnni qaytarish
+    
+    @staticmethod
+    def is_production() -> bool:
+        """Production muhitni aniqlash"""
+        # Ishonchli production detection
+        return not current_app.config.get('DEBUG', False) and \
+               not current_app.config.get('TESTING', False) and \
+               current_app.config.get('ENV', 'development') == 'production'
+    
+    @staticmethod
+    def validate_production_encryption():
+        """Production da shifrlash kaliti mavjudligini tekshirish"""
+        if CryptoUtils.is_production() and not CryptoUtils.is_encryption_available():
+            raise RuntimeError("ENCRYPTION_KEY majburiy production muhitida")
     
     @staticmethod
     def is_encryption_available() -> bool:

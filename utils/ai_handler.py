@@ -42,7 +42,7 @@ class AIHandler:
         try:
             if ai_provider == "openai" and openai_api_key:
                 return self._generate_openai_response(
-                    message, knowledge_base_content, model or "gpt-3.5-turbo", 
+                    message, knowledge_base_content, model or "gpt-4o-mini", 
                     openai_api_key, language, start_time
                 )
             else:
@@ -195,11 +195,11 @@ Foydalanuvchiga yordam ber va javobni {language} tilida ber.
     
     @staticmethod
     def get_available_models(provider: str) -> list:
-        """Mavjud modellar ro'yxati"""
+        """Mavjud modellar ro'yxati (2024/2025 versiyalar)"""
         if provider == "gemini":
-            return ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
+            return ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-1.0-pro"]
         elif provider == "openai":
-            return ["gpt-3.5-turbo", "gpt-4", "gpt-4-turbo-preview"]
+            return ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "gpt-3.5-turbo"]
         return []
 
 # Backward compatibility uchun eski funksiyalarni saqlash

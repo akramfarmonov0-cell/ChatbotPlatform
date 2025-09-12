@@ -54,10 +54,50 @@ class FileParser:
             return mime_type in allowed_mimes
             
         except ImportError:
-            # python-magic kutubxonasi o'rnatilmagan bo'lsa, faqat kengaytma orqali tekshirish
-            return True
+            # python-magic kutubxonasi o'rnatilmagan bo'lsa, xavfsizlik uchun signature tekshirish
+            return FileParser._validate_file_signature(file_path, expected_type)
         except Exception:
             # MIME tekshirishda xato bo'lsa, xavfsizlik uchun False qaytarish
+            return False
+    
+    @staticmethod
+    def _validate_file_signature(file_path: str, expected_type: str) -> bool:
+        """
+        Fayl signature/header orqali turini tekshirish (MIME fallback)
+        
+        Args:
+            file_path: Fayl manzili
+            expected_type: Kutilayotgan fayl turi
+            
+        Returns:
+            bool: Signature to'g'ri bo'lsa True
+        """
+        try:
+            with open(file_path, 'rb') as f:
+                header = f.read(16)  # Birinchi 16 byte
+            
+            # Fayl signature'lari
+            signatures = {
+                'pdf': [b'%PDF'],
+                'docx': [b'PK\x03\x04'],  # ZIP format (DOCX is ZIP-based)
+                'csv': [],  # CSV uchun aniq signature yo'q
+                'txt': []   # TXT uchun aniq signature yo'q
+            }
+            
+            expected_signatures = signatures.get(expected_type, [])
+            
+            # CSV va TXT uchun signature tekshirish shart emas
+            if expected_type in ['csv', 'txt']:
+                return True
+            
+            # Boshqa format uchun signature tekshirish
+            for signature in expected_signatures:
+                if header.startswith(signature):
+                    return True
+            
+            return False
+            
+        except Exception:
             return False
     
     @staticmethod
