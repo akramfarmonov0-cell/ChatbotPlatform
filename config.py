@@ -5,7 +5,12 @@ load_dotenv()
 
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-for-development-only')
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///app.db')
+    
+    # Normalize DATABASE_URL for SQLAlchemy 2.x compatibility
+    database_url = os.getenv('DATABASE_URL', 'sqlite:///app.db')
+    if database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql+psycopg2://', 1)
+    SQLALCHEMY_DATABASE_URI = database_url
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = 'uploads/knowledge/'  # Store outside static for security
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
@@ -31,10 +36,15 @@ class Config:
     @classmethod
     def validate_environment(cls):
         """Validate required environment variables for production."""
+        # Always validate core requirements
+        if not os.getenv('GEMINI_API_KEY'):
+            raise ValueError("GEMINI_API_KEY must be set for AI functionality")
+        
+        # Stricter validation for production
         if os.getenv('FLASK_ENV') == 'production':
-            if not os.getenv('SECRET_KEY'):
-                raise ValueError("SECRET_KEY must be set in production environment")
-            if not os.getenv('GEMINI_API_KEY'):
-                raise ValueError("GEMINI_API_KEY must be set in production environment")
+            if not os.getenv('SECRET_KEY') or os.getenv('SECRET_KEY') == 'dev-secret-key-for-development-only':
+                raise ValueError("SECRET_KEY must be set to a secure value in production environment")
             if not os.getenv('ENCRYPTION_KEY'):
                 raise ValueError("ENCRYPTION_KEY must be set for secure token storage")
+            if cls.WEBHOOK_BASE_URL == 'https://your-repl-name.repl.co':
+                raise ValueError("WEBHOOK_BASE_URL must be properly configured for production")

@@ -12,6 +12,9 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     
+    # Validate environment for production
+    Config.validate_environment()
+    
     # Initialize extensions
     db.init_app(app)
     
@@ -57,6 +60,12 @@ def create_app():
     
     return app
 
+# Create app instance for production deployment
+app = create_app()
+
 if __name__ == '__main__':
-    app = create_app()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Only run development server if explicitly in development mode
+    import os
+    debug_mode = os.getenv('FLASK_ENV') == 'development'
+    port = int(os.getenv('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=debug_mode)
