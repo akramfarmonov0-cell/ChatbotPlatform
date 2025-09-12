@@ -14,7 +14,8 @@ def create_app():
     
     # Database setup
     try:
-        from models.user import db
+        # Import all models to ensure they are registered with SQLAlchemy
+        from models import db
         db.init_app(app)
         
         # Create tables
