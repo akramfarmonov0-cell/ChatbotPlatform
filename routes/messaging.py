@@ -300,3 +300,169 @@ def validate_instagram_credentials():
             
     except Exception as e:
         return jsonify({'error': 'Validation failed'}), 500
+
+# ===== BOT SAVE ENDPOINTS =====
+
+@messaging_bp.route('/api/bots/telegram/save', methods=['POST'])
+@login_required
+def save_telegram_bot():
+    """Save Telegram bot configuration"""
+    try:
+        data = request.get_json()
+        bot_name = data.get('bot_name', '')
+        bot_token = data.get('bot_token', '')
+        
+        if not bot_name or not bot_token:
+            return jsonify({'error': 'Bot name and token required'}), 400
+        
+        # Create new bot
+        bot = TelegramBot(
+            user_id=current_user.id,
+            bot_name=bot_name
+        )
+        bot.set_token(bot_token)
+        
+        db.session.add(bot)
+        db.session.commit()
+        
+        return jsonify({'success': True, 'message': 'Bot saved successfully'}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Save Telegram bot error: {str(e)}")
+        return jsonify({'error': 'Failed to save bot'}), 500
+
+@messaging_bp.route('/api/bots/whatsapp/save', methods=['POST'])
+@login_required
+def save_whatsapp_account():
+    """Save WhatsApp Business account configuration"""
+    try:
+        data = request.get_json()
+        business_name = data.get('business_name', '')
+        app_id = data.get('app_id', '')
+        app_secret = data.get('app_secret', '')
+        verify_token = data.get('verify_token', '')
+        phone_number_id = data.get('phone_number_id', '')
+        
+        if not all([business_name, app_id, app_secret, verify_token, phone_number_id]):
+            return jsonify({'error': 'All fields are required'}), 400
+        
+        # Create new account
+        account = WhatsAppAccount(
+            user_id=current_user.id,
+            business_name=business_name,
+            phone_number_id=phone_number_id
+        )
+        account.set_credentials(app_id, app_secret, verify_token)
+        
+        db.session.add(account)
+        db.session.commit()
+        
+        return jsonify({'success': True, 'message': 'Account saved successfully'}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Save WhatsApp account error: {str(e)}")
+        return jsonify({'error': 'Failed to save account'}), 500
+
+@messaging_bp.route('/api/bots/instagram/save', methods=['POST'])
+@login_required
+def save_instagram_account():
+    """Save Instagram Business account configuration"""
+    try:
+        data = request.get_json()
+        account_name = data.get('account_name', '')
+        access_token = data.get('access_token', '')
+        page_id = data.get('page_id', '')
+        
+        if not all([account_name, access_token, page_id]):
+            return jsonify({'error': 'All fields are required'}), 400
+        
+        # Create new account
+        account = InstagramAccount(
+            user_id=current_user.id,
+            account_name=account_name,
+            page_id=page_id
+        )
+        account.set_access_token(access_token)
+        
+        db.session.add(account)
+        db.session.commit()
+        
+        return jsonify({'success': True, 'message': 'Account saved successfully'}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Save Instagram account error: {str(e)}")
+        return jsonify({'error': 'Failed to save account'}), 500
+
+# ===== BOT DELETE ENDPOINTS =====
+
+@messaging_bp.route('/api/bots/telegram/<int:bot_id>', methods=['DELETE'])
+@login_required
+def delete_telegram_bot(bot_id):
+    """Delete Telegram bot"""
+    try:
+        bot = TelegramBot.query.filter_by(
+            id=bot_id,
+            user_id=current_user.id
+        ).first()
+        
+        if not bot:
+            return jsonify({'error': 'Bot not found'}), 404
+        
+        db.session.delete(bot)
+        db.session.commit()
+        
+        return jsonify({'success': True, 'message': 'Bot deleted successfully'}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Delete Telegram bot error: {str(e)}")
+        return jsonify({'error': 'Failed to delete bot'}), 500
+
+@messaging_bp.route('/api/bots/whatsapp/<int:account_id>', methods=['DELETE'])
+@login_required
+def delete_whatsapp_account(account_id):
+    """Delete WhatsApp Business account"""
+    try:
+        account = WhatsAppAccount.query.filter_by(
+            id=account_id,
+            user_id=current_user.id
+        ).first()
+        
+        if not account:
+            return jsonify({'error': 'Account not found'}), 404
+        
+        db.session.delete(account)
+        db.session.commit()
+        
+        return jsonify({'success': True, 'message': 'Account deleted successfully'}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Delete WhatsApp account error: {str(e)}")
+        return jsonify({'error': 'Failed to delete account'}), 500
+
+@messaging_bp.route('/api/bots/instagram/<int:account_id>', methods=['DELETE'])
+@login_required
+def delete_instagram_account(account_id):
+    """Delete Instagram Business account"""
+    try:
+        account = InstagramAccount.query.filter_by(
+            id=account_id,
+            user_id=current_user.id
+        ).first()
+        
+        if not account:
+            return jsonify({'error': 'Account not found'}), 404
+        
+        db.session.delete(account)
+        db.session.commit()
+        
+        return jsonify({'success': True, 'message': 'Account deleted successfully'}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Delete Instagram account error: {str(e)}")
+        return jsonify({'error': 'Failed to delete account'}), 500

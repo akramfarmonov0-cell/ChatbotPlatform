@@ -39,6 +39,11 @@
                                 <i class="fas fa-book me-1"></i>{{ _("Ma'lumotlar bazasi") }}
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.bots') }}">
+                                <i class="fas fa-robot me-1"></i>{{ _('Bot Integrations') }}
+                            </a>
+                        </li>
                         {% if current_user.is_admin %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('admin.dashboard') }}">

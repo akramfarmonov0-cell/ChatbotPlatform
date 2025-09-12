@@ -4,6 +4,7 @@ from flask_babel import Babel
 from models.user import db, User
 from routes.main_routes import main_bp
 from routes.admin_routes import admin_bp
+from routes.messaging import messaging_bp
 from config import Config
 import os
 
@@ -38,6 +39,7 @@ def create_app():
     # Register blueprints
     app.register_blueprint(main_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(messaging_bp)
     
     # Language switching route
     @app.route('/set_language/<language>')

@@ -166,3 +166,12 @@ def pending():
     if current_user.is_approved:
         return redirect(url_for('main.chat'))
     return render_template('pending.html')
+
+@main_bp.route('/bots')
+@login_required
+def bots():
+    """Bot integrations management page"""
+    if not current_user.is_approved:
+        return redirect(url_for('main.pending'))
+    
+    return render_template('user/bots.html')

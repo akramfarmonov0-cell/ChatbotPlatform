@@ -10,8 +10,8 @@ class TelegramHandler:
     """Handle Telegram Bot API operations"""
     
     @staticmethod
-    def set_webhook(bot_token, webhook_url):
-        """Set webhook for Telegram bot"""
+    def set_webhook(bot_token, webhook_url, secret_token=None):
+        """Set webhook for Telegram bot with optional secret token"""
         try:
             api_url = f"{current_app.config['TELEGRAM_API_URL']}{bot_token}/setWebhook"
             
@@ -19,6 +19,10 @@ class TelegramHandler:
                 'url': webhook_url,
                 'drop_pending_updates': True
             }
+            
+            # Add secret token for webhook verification
+            if secret_token:
+                data['secret_token'] = secret_token
             
             response = requests.post(api_url, json=data, timeout=10)
             response.raise_for_status()

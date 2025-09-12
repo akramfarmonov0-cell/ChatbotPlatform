@@ -11,16 +11,16 @@ class WhatsAppHandler:
     """Handle WhatsApp Business API operations"""
     
     @staticmethod
-    def verify_webhook_signature(payload, signature, verify_token):
-        """Verify webhook signature from WhatsApp"""
+    def verify_webhook_signature(payload, signature, app_secret):
+        """Verify webhook signature from WhatsApp using app secret"""
         try:
             # Remove 'sha256=' prefix if present
             if signature.startswith('sha256='):
                 signature = signature[7:]
             
-            # Calculate expected signature
+            # Calculate expected signature using app_secret (not verify_token)
             expected_signature = hmac.new(
-                verify_token.encode('utf-8'),
+                app_secret.encode('utf-8'),
                 payload,
                 hashlib.sha256
             ).hexdigest()

@@ -11,3 +11,6 @@ Werkzeug==3.0.1
 cryptography==42.0.5
 python-telegram-bot==20.7
 httpx==0.25.2
+cryptography
+pyTelegramBotAPI
+requests-oauthlib
