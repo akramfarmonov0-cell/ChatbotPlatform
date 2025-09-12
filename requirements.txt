@@ -15,3 +15,10 @@ cryptography
 pyTelegramBotAPI
 requests-oauthlib
 psycopg2-binary
+APScheduler
+cryptography
+Flask-Mail
+langdetect
+pandas
+PyPDF2
+python-docx
