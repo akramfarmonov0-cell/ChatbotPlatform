@@ -22,3 +22,4 @@ langdetect
 pandas
 PyPDF2
 python-docx
+openai==1.54.4

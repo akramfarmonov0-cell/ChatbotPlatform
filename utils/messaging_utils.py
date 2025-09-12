@@ -208,6 +208,25 @@ class WhatsAppUtils:
         except:
             return None
 
+class MessagingUtils:
+    """Umumiy messaging utilities"""
+    
+    def __init__(self):
+        self.telegram = TelegramUtils()
+        self.whatsapp = WhatsAppUtils()
+        self.instagram = InstagramUtils()
+    
+    def send_message(self, platform: str, **kwargs) -> Dict[str, Any]:
+        """Platform bo'yicha xabar yuborish"""
+        if platform == 'telegram':
+            return self.telegram.send_message(**kwargs)
+        elif platform == 'whatsapp':
+            return self.whatsapp.send_message(**kwargs)
+        elif platform == 'instagram':
+            return self.instagram.send_message(**kwargs)
+        else:
+            return {'success': False, 'error': f'Noma\'lum platform: {platform}'}
+
 class InstagramUtils:
     """Instagram Business API utilitasi"""
     

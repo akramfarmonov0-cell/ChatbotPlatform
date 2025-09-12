@@ -117,9 +117,11 @@ def send_message():
         else:
             # Yangi suhbat yaratish
             conversation = Conversation(
-                id=str(uuid.uuid4()),
                 user_id=user.id,
                 title=message_text[:50] + ('...' if len(message_text) > 50 else ''),
+                platform='dashboard',
+                sender_id=str(user.id),
+                message=message_text,
                 created_at=datetime.utcnow(),
                 updated_at=datetime.utcnow()
             )
@@ -128,7 +130,6 @@ def send_message():
         
         # Foydalanuvchi xabarini saqlash
         user_message = Message(
-            id=str(uuid.uuid4()),
             conversation_id=conversation.id,
             role='user',
             content=message_text,
@@ -143,7 +144,7 @@ def send_message():
             knowledge_files = KnowledgeBase.query.filter_by(user_id=user.id, is_active=True).all()
             for kb_file in knowledge_files:
                 if kb_file.content:
-                    knowledge_content += f"\\n\\n{kb_file.filename}:\\n{kb_file.content}"
+                    knowledge_content += f"\n\n{kb_file.filename}:\n{kb_file.content}"
             
             # AI handler orqali javob olish
             ai_handler = AIHandler()
@@ -157,12 +158,11 @@ def send_message():
             if ai_response.get('success'):
                 # AI javobini saqlash
                 ai_message = Message(
-                    id=str(uuid.uuid4()),
                     conversation_id=conversation.id,
                     role='assistant',
                     content=ai_response['response'],
                     created_at=datetime.utcnow(),
-                    metadata={
+                    extra_data={
                         'model_used': ai_response.get('model_used'),
                         'response_time': ai_response.get('response_time'),
                         'knowledge_used': bool(knowledge_content)
@@ -252,7 +252,7 @@ def get_conversation_messages(conversation_id):
             'role': msg.role,
             'content': msg.content,
             'created_at': msg.created_at.isoformat(),
-            'metadata': msg.metadata
+            'metadata': msg.extra_data
         })
     
     return jsonify({'success': True, 'messages': result})

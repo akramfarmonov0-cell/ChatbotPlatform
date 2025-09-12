@@ -9,7 +9,7 @@ class Message(db.Model):
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'), nullable=False)
     role = db.Column(db.String(10), nullable=False)  # user, assistant
     content = db.Column(db.Text, nullable=False)
-    metadata = db.Column(db.JSON)
+    extra_data = db.Column(db.JSON)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relationships
@@ -21,16 +21,20 @@ class Conversation(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    platform = db.Column(db.String(20), nullable=False)  # telegram, whatsapp, instagram
-    sender_id = db.Column(db.String(100), nullable=False)  # mijoz ID
+    title = db.Column(db.String(100))  # Chat title for dashboard
+    platform = db.Column(db.String(20), nullable=True, default='dashboard')  # telegram, whatsapp, instagram, dashboard
+    sender_id = db.Column(db.String(100), nullable=True)  # mijoz ID
     sender_name = db.Column(db.String(100))
-    message = db.Column(db.Text, nullable=False)
+    message = db.Column(db.Text, nullable=True)  # First message or empty for dashboard chats
     reply = db.Column(db.Text)
     language = db.Column(db.String(2))  # uz, ru, en
     message_type = db.Column(db.String(20), default='text')  # text, image, document, etc.
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)  # For dashboard compatibility
     response_time = db.Column(db.Float)  # seconds
     ai_provider = db.Column(db.String(20), default='gemini')  # gemini, openai
+    message_count = db.Column(db.Integer, default=0)  # Total messages in conversation
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow)  # Last update time
     
     # Relationships
     user = db.relationship('User', backref='conversations')
@@ -46,8 +50,12 @@ class Conversation(db.Model):
             'language': self.language,
             'message_type': self.message_type,
             'timestamp': self.timestamp.isoformat() if self.timestamp else None,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
             'response_time': self.response_time,
-            'ai_provider': self.ai_provider
+            'ai_provider': self.ai_provider,
+            'title': self.title,
+            'message_count': self.message_count,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }
     
     @staticmethod

@@ -10,7 +10,7 @@ admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 def require_admin():
     if not current_user.is_authenticated or not current_user.is_admin:
         flash('Admin huquqi kerak.')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.home'))
 
 @admin_bp.route('/')
 def dashboard():
