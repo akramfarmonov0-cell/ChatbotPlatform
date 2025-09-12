@@ -318,7 +318,7 @@ def broadcast_message():
         target = data.get('target', 'all')  # all, trial, paid
         
         if not message:
-            return jsonify({'success': False, 'error': 'Xabar matni bo\\'sh'}), 400
+            return jsonify({'success': False, 'error': 'Xabar matni bosh'}), 400
         
         # Maqsadli foydalanuvchilar
         query = User.query.filter_by(is_active=True)

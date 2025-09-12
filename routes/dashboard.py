@@ -197,7 +197,7 @@ def send_message():
                 db.session.rollback()
                 return jsonify({
                     'success': False,
-                    'error': f"AI xatosi: {ai_response.get('error', 'Noma\'lum xato')}"
+                    'error': f"AI xatosi: {ai_response.get('error', 'Nomalum xato')}"
                 }), 500
                 
         except Exception as ai_error:
@@ -274,11 +274,11 @@ def delete_conversation(conversation_id):
         db.session.delete(conversation)
         db.session.commit()
         
-        return jsonify({'success': True, 'message': 'Suhbat o\\'chirildi'})
+        return jsonify({'success': True, 'message': 'Suhbat ochirildi'})
         
     except Exception as e:
         db.session.rollback()
-        return jsonify({'success': False, 'error': 'Suhbatni o\\'chirishda xato'}), 500
+        return jsonify({'success': False, 'error': 'Suhbatni ochirishda xato'}), 500
 
 @dashboard_bp.route('/knowledge')
 @login_required

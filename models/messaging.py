@@ -4,6 +4,34 @@ from cryptography.fernet import Fernet
 from flask import current_app
 import os
 
+class MessagingPlatform(db.Model):
+    """Messaging platformalar umumiy modeli"""
+    __tablename__ = 'messaging_platforms'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    platform_type = db.Column(db.String(20), nullable=False)  # telegram, whatsapp, instagram
+    platform_name = db.Column(db.String(100), nullable=False)
+    is_active = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationship
+    user = db.relationship('User', backref='messaging_platforms')
+
+class PlatformCredentials(db.Model):
+    """Platform credentials umumiy modeli"""
+    __tablename__ = 'platform_credentials'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    platform_id = db.Column(db.Integer, db.ForeignKey('messaging_platforms.id'), nullable=False)
+    credential_type = db.Column(db.String(50), nullable=False)  # token, app_id, secret, etc.
+    encrypted_value = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationship
+    platform = db.relationship('MessagingPlatform', backref='credentials')
+
 class TelegramBot(db.Model):
     __tablename__ = 'telegram_bots'
     
