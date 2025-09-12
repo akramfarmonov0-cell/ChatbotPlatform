@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Chat - AI Chatbot Platform{% endblock %}
+{% block title %}{{ _('Chat') }} - {{ _('AI Chatbot Platform') }}{% endblock %}
 
 {% block content %}
 <div class="container-fluid py-3">
@@ -9,8 +9,8 @@
             <div class="card shadow h-100">
                 <div class="card-header bg-primary text-white">
                     <h5 class="mb-0">
-                        <i class="fas fa-robot me-2"></i>AI Chat Assistant
-                        <span class="badge bg-light text-dark ms-2">Online</span>
+                        <i class="fas fa-robot me-2"></i>{{ _('AI Chat Assistant') }}
+                        <span class="badge bg-light text-dark ms-2">{{ _('Online') }}</span>
                     </h5>
                 </div>
                 
@@ -19,7 +19,7 @@
                     <div id="chatMessages" class="flex-grow-1 p-3 overflow-auto">
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i>
-                            Salom! Men sizga yordam berish uchun tayyorman. Savolingizni yozing.
+                            {{ _('Salom! Men sizga yordam berish uchun tayyorman. Savolingizni yozing.') }}
                         </div>
                     </div>
                     
@@ -29,7 +29,7 @@
                             <input type="text" 
                                    id="messageInput" 
                                    class="form-control me-2" 
-                                   placeholder="Xabaringizni yozing..." 
+                                   placeholder="{{ _('Xabaringizni yozing...') }}" 
                                    autocomplete="off"
                                    required>
                             <button type="submit" class="btn btn-primary" id="sendBtn">
@@ -49,9 +49,9 @@
         <div class="modal-content">
             <div class="modal-body text-center p-4">
                 <div class="spinner-border text-primary mb-3" role="status">
-                    <span class="visually-hidden">Yuklanmoqda...</span>
+                    <span class="visually-hidden">{{ _('Yuklanmoqda...') }}</span>
                 </div>
-                <p class="mb-0">AI javob tayyorlamoqda...</p>
+                <p class="mb-0">{{ _('AI javob tayyorlamoqda...') }}</p>
             </div>
         </div>
     </div>

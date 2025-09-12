@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}AI Chatbot Platform{% endblock %}</title>
+    <title>{% block title %}{{ _('AI Chatbot Platform') }}{% endblock %}</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -19,7 +19,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('main.index') }}">
-                <i class="fas fa-robot me-2"></i>AI Chatbot
+                <i class="fas fa-robot me-2"></i>{{ _('AI Chatbot') }}
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -31,18 +31,18 @@
                     {% if current_user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('main.chat') }}">
-                                <i class="fas fa-comments me-1"></i>Chat
+                                <i class="fas fa-comments me-1"></i>{{ _('Chat') }}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('main.knowledge') }}">
-                                <i class="fas fa-book me-1"></i>Ma'lumotlar bazasi
+                                <i class="fas fa-book me-1"></i>{{ _("Ma'lumotlar bazasi") }}
                             </a>
                         </li>
                         {% if current_user.is_admin %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('admin.dashboard') }}">
-                                <i class="fas fa-cog me-1"></i>Admin
+                                <i class="fas fa-cog me-1"></i>{{ _('Admin') }}
                             </a>
                         </li>
                         {% endif %}
@@ -53,7 +53,7 @@
                     <!-- Language selector -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-globe me-1"></i>Til
+                            <i class="fas fa-globe me-1"></i>{{ _('Til') }}
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ url_for('set_language', language='uz') }}">O'zbek</a></li>
@@ -69,19 +69,19 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{ url_for('main.logout') }}">
-                                    <i class="fas fa-sign-out-alt me-1"></i>Chiqish
+                                    <i class="fas fa-sign-out-alt me-1"></i>{{ _('Chiqish') }}
                                 </a></li>
                             </ul>
                         </li>
                     {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('main.login') }}">
-                                <i class="fas fa-sign-in-alt me-1"></i>Kirish
+                                <i class="fas fa-sign-in-alt me-1"></i>{{ _('Kirish') }}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('main.register') }}">
-                                <i class="fas fa-user-plus me-1"></i>Ro'yxatdan o'tish
+                                <i class="fas fa-user-plus me-1"></i>{{ _("Ro'yxatdan o'tish") }}
                             </a>
                         </li>
                     {% endif %}

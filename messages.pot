@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-09-12 12:06+0000\n"
+"POT-Creation-Date: 2025-09-12 12:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,4 +16,88 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
+
+#: templates/base.html:6 templates/chat.html:3 templates/login.html:3
+msgid "AI Chatbot Platform"
+msgstr ""
+
+#: templates/base.html:22
+msgid "AI Chatbot"
+msgstr ""
+
+#: templates/base.html:34 templates/chat.html:3
+msgid "Chat"
+msgstr ""
+
+#: templates/base.html:39
+msgid "Ma'lumotlar bazasi"
+msgstr ""
+
+#: templates/base.html:45
+msgid "Admin"
+msgstr ""
+
+#: templates/base.html:56
+msgid "Til"
+msgstr ""
+
+#: templates/base.html:72
+msgid "Chiqish"
+msgstr ""
+
+#: templates/base.html:79 templates/login.html:3 templates/login.html:33
+msgid "Kirish"
+msgstr ""
+
+#: templates/base.html:84
+msgid "Ro'yxatdan o'tish"
+msgstr ""
+
+#: templates/chat.html:12
+msgid "AI Chat Assistant"
+msgstr ""
+
+#: templates/chat.html:13
+msgid "Online"
+msgstr ""
+
+#: templates/chat.html:22
+msgid "Salom! Men sizga yordam berish uchun tayyorman. Savolingizni yozing."
+msgstr ""
+
+#: templates/chat.html:32
+msgid "Xabaringizni yozing..."
+msgstr ""
+
+#: templates/chat.html:52
+msgid "Yuklanmoqda..."
+msgstr ""
+
+#: templates/chat.html:54
+msgid "AI javob tayyorlamoqda..."
+msgstr ""
+
+#: templates/login.html:13
+msgid "Tizimga kirish"
+msgstr ""
+
+#: templates/login.html:14
+msgid "Hisobingizga kiring"
+msgstr ""
+
+#: templates/login.html:20
+msgid "Foydalanuvchi nomi"
+msgstr ""
+
+#: templates/login.html:27
+msgid "Parol"
+msgstr ""
+
+#: templates/login.html:38
+msgid "Hisobingiz yo'qmi?"
+msgstr ""
+
+#: templates/login.html:40
+msgid "Ro'yxatdan o'ting"
+msgstr ""
 

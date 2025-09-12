@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-09-12 12:05+0000\n"
+"POT-Creation-Date: 2025-09-12 12:12+0000\n"
 "PO-Revision-Date: 2025-09-12 12:05+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -18,4 +18,88 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
+
+#: templates/base.html:6 templates/chat.html:3 templates/login.html:3
+msgid "AI Chatbot Platform"
+msgstr "Платформа AI Чатбот"
+
+#: templates/base.html:22
+msgid "AI Chatbot"
+msgstr "AI Чатбот"
+
+#: templates/base.html:34 templates/chat.html:3
+msgid "Chat"
+msgstr "Чат"
+
+#: templates/base.html:39
+msgid "Ma'lumotlar bazasi"
+msgstr "База знаний"
+
+#: templates/base.html:45
+msgid "Admin"
+msgstr "Админ"
+
+#: templates/base.html:56
+msgid "Til"
+msgstr "Язык"
+
+#: templates/base.html:72
+msgid "Chiqish"
+msgstr "Выйти"
+
+#: templates/base.html:79 templates/login.html:3 templates/login.html:33
+msgid "Kirish"
+msgstr "Войти"
+
+#: templates/base.html:84
+msgid "Ro'yxatdan o'tish"
+msgstr "Регистрация"
+
+#: templates/chat.html:12
+msgid "AI Chat Assistant"
+msgstr "AI Чат-ассистент"
+
+#: templates/chat.html:13
+msgid "Online"
+msgstr "Онлайн"
+
+#: templates/chat.html:22
+msgid "Salom! Men sizga yordam berish uchun tayyorman. Savolingizni yozing."
+msgstr "Привет! Я готов помочь вам. Напишите ваш вопрос."
+
+#: templates/chat.html:32
+msgid "Xabaringizni yozing..."
+msgstr "Напишите ваше сообщение..."
+
+#: templates/chat.html:52
+msgid "Yuklanmoqda..."
+msgstr "Загрузка..."
+
+#: templates/chat.html:54
+msgid "AI javob tayyorlamoqda..."
+msgstr "AI готовит ответ..."
+
+#: templates/login.html:13
+msgid "Tizimga kirish"
+msgstr "Войти в систему"
+
+#: templates/login.html:14
+msgid "Hisobingizga kiring"
+msgstr "Войдите в свой аккаунт"
+
+#: templates/login.html:20
+msgid "Foydalanuvchi nomi"
+msgstr "Имя пользователя"
+
+#: templates/login.html:27
+msgid "Parol"
+msgstr "Пароль"
+
+#: templates/login.html:38
+msgid "Hisobingiz yo'qmi?"
+msgstr "Нет аккаунта?"
+
+#: templates/login.html:40
+msgid "Ro'yxatdan o'ting"
+msgstr "Зарегистрируйтесь"
 
