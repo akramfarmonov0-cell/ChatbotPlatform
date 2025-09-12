@@ -22,6 +22,45 @@ class FileParser:
                filename.rsplit('.', 1)[1].lower() in FileParser.ALLOWED_EXTENSIONS
     
     @staticmethod
+    def validate_file_mime_type(file_path: str, expected_type: str) -> bool:
+        """
+        Fayl MIME turini tekshirish
+        
+        Args:
+            file_path: Fayl manzili
+            expected_type: Kutilayotgan fayl turi (pdf, docx, csv, txt)
+            
+        Returns:
+            bool: MIME turi to'g'ri bo'lsa True
+        """
+        try:
+            import magic
+            
+            # Fayl MIME turini aniqlash
+            mime_type = magic.from_file(file_path, mime=True)
+            
+            # Kutilayotgan MIME turlari
+            expected_mimes = {
+                'pdf': ['application/pdf'],
+                'docx': [
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/msword'
+                ],
+                'csv': ['text/csv', 'text/plain', 'application/csv'],
+                'txt': ['text/plain', 'text/unicode', 'application/txt']
+            }
+            
+            allowed_mimes = expected_mimes.get(expected_type, [])
+            return mime_type in allowed_mimes
+            
+        except ImportError:
+            # python-magic kutubxonasi o'rnatilmagan bo'lsa, faqat kengaytma orqali tekshirish
+            return True
+        except Exception:
+            # MIME tekshirishda xato bo'lsa, xavfsizlik uchun False qaytarish
+            return False
+    
+    @staticmethod
     def parse_file(file_path: str, file_type: str) -> Dict[str, Any]:
         """
         Faylni parse qilish
@@ -82,12 +121,34 @@ class FileParser:
     def _parse_pdf(file_path: str) -> Dict[str, Any]:
         """PDF faylni parse qilish"""
         try:
+            # MIME tekshirish
+            if not FileParser.validate_file_mime_type(file_path, 'pdf'):
+                return {
+                    'content': '',
+                    'success': False,
+                    'error': 'Fayl haqiqiy PDF fayl emas',
+                    'metadata': {}
+                }
+            
             doc = fitz.open(file_path)
             content = ""
+            page_count = len(doc)
             
-            for page_num in range(len(doc)):
+            # Juda ko'p sahifali PDF uchun cheklash (500 sahifa)
+            max_pages = 500
+            if page_count > max_pages:
+                page_count = max_pages
+                content += f"[OGOHLANTIRISH: Faylda {len(doc)} sahifa bor, faqat birinchi {max_pages} sahifa o'qildi]\n\n"
+            
+            for page_num in range(page_count):
                 page = doc.load_page(page_num)
-                content += page.get_text()
+                page_text = page.get_text()
+                
+                # Sahifa matni uzunligini cheklash (100KB har sahifa)
+                if len(page_text) > 100000:
+                    page_text = page_text[:100000] + "\n[MATN QISQARTIRILDI...]"
+                
+                content += page_text
                 content += "\n\n"  # Sahifalar orasida bo'sh joy
             
             doc.close()
@@ -97,7 +158,8 @@ class FileParser:
                 'success': True,
                 'error': None,
                 'metadata': {
-                    'pages': len(doc),
+                    'pages': page_count,
+                    'total_pages': len(doc),
                     'file_type': 'pdf'
                 }
             }
@@ -152,26 +214,43 @@ class FileParser:
     def _parse_csv(file_path: str) -> Dict[str, Any]:
         """CSV faylni parse qilish"""
         try:
+            # MIME tekshirish
+            if not FileParser.validate_file_mime_type(file_path, 'csv'):
+                return {
+                    'content': '',
+                    'success': False,
+                    'error': 'Fayl haqiqiy CSV fayl emas',
+                    'metadata': {}
+                }
+            
             content = ""
             row_count = 0
+            max_rows = 5000  # Qatorlar soni cheklovi
             
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as file:
                 # CSV formatini aniqlash
                 sample = file.read(1024)
                 file.seek(0)
                 
-                sniffer = csv.Sniffer()
-                delimiter = sniffer.sniff(sample).delimiter
+                try:
+                    sniffer = csv.Sniffer()
+                    delimiter = sniffer.sniff(sample).delimiter
+                except:
+                    delimiter = ','  # Default delimiter
                 
                 reader = csv.reader(file, delimiter=delimiter)
                 
                 for row in reader:
+                    # Har bir qatordagi ustunlar sonini cheklash
+                    if len(row) > 100:
+                        row = row[:100] + ['[QO\'SHIMCHA USTUNLAR QISQARTIRILDI]']
+                    
                     content += " | ".join(row) + "\n"
                     row_count += 1
                     
-                    # Juda katta CSV fayllar uchun cheklash
-                    if row_count > 10000:
-                        content += "... (faylning qolgan qismi o'qilmadi - juda katta)\n"
+                    # Qatorlar soni cheklovi
+                    if row_count > max_rows:
+                        content += f"... (faylning qolgan qismi o'qilmadi - {max_rows} qatordan ortiq)\n"
                         break
             
             return {
@@ -181,6 +260,7 @@ class FileParser:
                 'metadata': {
                     'rows': row_count,
                     'delimiter': delimiter,
+                    'max_rows_reached': row_count > max_rows,
                     'file_type': 'csv'
                 }
             }

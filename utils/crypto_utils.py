@@ -38,11 +38,21 @@ class CryptoUtils:
                 encrypted = fernet.encrypt(text.encode())
                 return encrypted.decode()
             else:
-                # Fallback - oddiy base64 encoding (development uchun)
+                # Production da fallback ruxsat etilmagan
+                if current_app.config.get('ENV') == 'production':
+                    raise ValueError("ENCRYPTION_KEY talab qilinadi production muhitida")
+                
+                # Faqat development uchun base64 encoding
+                import warnings
+                warnings.warn("ENCRYPTION_KEY o'rnatilmagan - base64 ishlatilmoqda (faqat development)")
                 return base64.b64encode(text.encode()).decode()
                 
-        except Exception:
-            # Agar shifrlash muvaffaqiyatsiz bo'lsa, base64 ishlatish
+        except Exception as e:
+            # Production da xato bo'lsa, jarayonni to'xtatish
+            if current_app.config.get('ENV') == 'production':
+                raise e
+            
+            # Development da fallback
             return base64.b64encode(text.encode()).decode()
     
     @staticmethod
@@ -66,11 +76,19 @@ class CryptoUtils:
                 decrypted = fernet.decrypt(encrypted_text.encode())
                 return decrypted.decode()
             else:
-                # Fallback - base64 decoding
+                # Production da fallback ruxsat etilmagan
+                if current_app.config.get('ENV') == 'production':
+                    raise ValueError("ENCRYPTION_KEY talab qilinadi production muhitida")
+                
+                # Development uchun base64 decoding
                 return base64.b64decode(encrypted_text.encode()).decode()
                 
-        except Exception:
-            # Agar deshifrlash muvaffaqiyatsiz bo'lsa, base64 ishlatish
+        except Exception as e:
+            # Production da xato bo'lsa, jarayonni to'xtatish
+            if current_app.config.get('ENV') == 'production':
+                raise e
+            
+            # Development da fallback
             try:
                 return base64.b64decode(encrypted_text.encode()).decode()
             except:

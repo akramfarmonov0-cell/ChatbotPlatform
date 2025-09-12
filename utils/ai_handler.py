@@ -85,19 +85,21 @@ class AIHandler:
     
     def _generate_openai_response(self, message: str, knowledge_base: str, 
                                  model: str, api_key: str, language: str, start_time: float) -> Dict[str, Any]:
-        """OpenAI bilan javob yaratish"""
+        """OpenAI bilan javob yaratish (v1.0.0+ API)"""
         try:
-            # OpenAI API kalitini o'rnatish
-            openai.api_key = api_key
+            from openai import OpenAI
+            
+            # OpenAI client yaratish
+            client = OpenAI(api_key=api_key)
             
             # Prompt yaratish
-            prompt = self._build_prompt(message, knowledge_base, language)
+            system_prompt = self._build_system_prompt(knowledge_base, language)
             
             # OpenAI dan javob olish
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model=model,
                 messages=[
-                    {"role": "system", "content": prompt},
+                    {"role": "system", "content": system_prompt},
                     {"role": "user", "content": message}
                 ],
                 max_tokens=1500,
@@ -115,8 +117,8 @@ class AIHandler:
         except Exception as e:
             raise Exception(f"OpenAI API xato: {str(e)}")
     
-    def _build_prompt(self, message: str, knowledge_base: str, language: str) -> str:
-        """AI uchun prompt yaratish"""
+    def _build_system_prompt(self, knowledge_base: str, language: str) -> str:
+        """AI uchun system prompt yaratish"""
         
         # Til bo'yicha yo'riqnomalar
         language_instructions = {
@@ -140,29 +142,32 @@ If the knowledge base doesn't contain the answer, help using your general knowle
         instruction = language_instructions.get(language, language_instructions['uz'])
         
         if knowledge_base:
-            prompt = f"""
+            system_prompt = f"""
 {instruction}
 
 BILIMLAR BAZASI:
 {knowledge_base}
 
-QOIDA:
+QOIDALAR:
 1. Avval bilimlar bazasini tekshir
 2. Agar javob bor bo'lsa, uni ishlatib javob ber
 3. Agar yo'q bo'lsa, umumiy bilimlaringdan yordam ber
 4. Har doim foydali va aniq javob ber
 5. Javobni {language} tilida ber
-
-FOYDALANUVCHI SAVOLI: {message}
 """
         else:
-            prompt = f"""
+            system_prompt = f"""
 {instruction}
 
-FOYDALANUVCHI SAVOLI: {message}
+Foydalanuvchiga yordam ber va javobni {language} tilida ber.
 """
         
-        return prompt
+        return system_prompt
+    
+    def _build_prompt(self, message: str, knowledge_base: str, language: str) -> str:
+        """Gemini uchun prompt yaratish (backward compatibility)"""
+        system_prompt = self._build_system_prompt(knowledge_base, language)
+        return f"{system_prompt}\n\nFOYDALANUVCHI SAVOLI: {message}"
     
     def _get_error_message(self, language: str) -> str:
         """Xato xabarlari"""
@@ -175,11 +180,15 @@ FOYDALANUVCHI SAVOLI: {message}
     
     @staticmethod
     def validate_openai_api_key(api_key: str) -> bool:
-        """OpenAI API kalitini tekshirish"""
+        """OpenAI API kalitini tekshirish (v1.0.0+ API)"""
         try:
-            openai.api_key = api_key
-            # Test so'rov yuborish
-            response = openai.Model.list()
+            from openai import OpenAI
+            
+            # Client yaratish va test qilish
+            client = OpenAI(api_key=api_key)
+            
+            # Test so'rov yuborish - models ro'yxatini olish
+            models = client.models.list()
             return True
         except:
             return False
