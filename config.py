@@ -33,7 +33,7 @@ class Config:
     INSTAGRAM_API_URL = 'https://graph.facebook.com/v18.0'
     
     # Platform detection (Replit vs Production)
-    IS_REPLIT = 'REPL_ID' in os.environ
+    IS_REPLIT = bool(os.environ.get('REPLIT_DEV_DOMAIN')) or bool(os.environ.get('REPL_ID'))
     
     # Validate critical environment variables
     @classmethod
