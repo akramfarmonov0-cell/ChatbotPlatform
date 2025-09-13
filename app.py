@@ -2,7 +2,40 @@
 AI Chatbot SaaS Platform - Asosiy Flask ilovasi
 """
 import os
-from datetime import timedelta
+from datetime import timedelta, datetime
+from werkzeug.security import generate_password_hash
+import uuid
+
+def init_default_data():
+    """Production uchun boshlang'ich foydalanuvchilarni yaratish"""
+    try:
+        from models.user import User, db
+        
+        print("🔄 Initializing default users...")
+        
+        # Admin foydalanuvchini tekshirish
+        admin_user = User.query.filter_by(phone='+998901234567').first()
+        
+        if not admin_user:
+            print("👤 Creating admin user...")
+            admin_user = User(
+                id=str(uuid.uuid4()),
+                full_name='Admin User',
+                phone='+998901234567',
+                password_hash=generate_password_hash('admin123'),
+                is_admin=True,
+                is_active=True,
+                is_trial=False,
+                created_at=datetime.utcnow()
+            )
+            db.session.add(admin_user)
+            print("✅ Admin user created: +998901234567 / admin123")
+        
+        db.session.commit()
+        print("🎉 Default users initialized successfully!")
+        
+    except Exception as e:
+        print(f"❌ Default data initialization failed: {e}")
 
 def create_app():
     """Flask ilovasi yaratish"""
@@ -37,6 +70,11 @@ def create_app():
         # Create tables
         with app.app_context():
             db.create_all()
+            
+            # Initialize default users for production
+            if os.getenv('FLASK_ENV') == 'production' or not os.path.exists('app.db'):
+                init_default_data()
+                
         print("Database initialized successfully!")
     except Exception as e:
         print(f"Database setup error: {e}")
