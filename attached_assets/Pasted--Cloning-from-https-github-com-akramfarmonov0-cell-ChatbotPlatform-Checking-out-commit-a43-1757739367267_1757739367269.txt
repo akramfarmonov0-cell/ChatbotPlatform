@@ -1,0 +1,344 @@
+==> Cloning from https://github.com/akramfarmonov0-cell/ChatbotPlatform
+==> Checking out commit a43a57614cb39b5338be1b4ab03e85b4ef8b64d9 in branch main
+==> Using Python version 3.13.4 (default)
+==> Docs on specifying a Python version: https://render.com/docs/python-version
+==> Using Poetry version 2.1.3 (default)
+==> Docs on specifying a Poetry version: https://render.com/docs/poetry-version
+==> Running build command 'pip install -r requirements.txt'...
+Collecting Flask==3.0.3 (from -r requirements.txt (line 1))
+  Downloading flask-3.0.3-py3-none-any.whl.metadata (3.2 kB)
+Collecting Flask-SQLAlchemy==3.0.5 (from -r requirements.txt (line 2))
+  Downloading flask_sqlalchemy-3.0.5-py3-none-any.whl.metadata (3.3 kB)
+Collecting Flask-Login==0.6.3 (from -r requirements.txt (line 3))
+  Downloading Flask_Login-0.6.3-py3-none-any.whl.metadata (5.8 kB)
+Collecting Flask-Babel==4.0.0 (from -r requirements.txt (line 4))
+  Downloading flask_babel-4.0.0-py3-none-any.whl.metadata (1.9 kB)
+Collecting Flask-Mail==0.10.0 (from -r requirements.txt (line 5))
+  Downloading flask_mail-0.10.0-py3-none-any.whl.metadata (2.1 kB)
+Collecting google-generativeai==0.5.0 (from -r requirements.txt (line 6))
+  Downloading google_generativeai-0.5.0-py3-none-any.whl.metadata (3.9 kB)
+Collecting python-dotenv==1.0.0 (from -r requirements.txt (line 7))
+  Downloading python_dotenv-1.0.0-py3-none-any.whl.metadata (21 kB)
+Collecting requests==2.31.0 (from -r requirements.txt (line 8))
+  Downloading requests-2.31.0-py3-none-any.whl.metadata (4.6 kB)
+Collecting gunicorn==21.2.0 (from -r requirements.txt (line 9))
+  Downloading gunicorn-21.2.0-py3-none-any.whl.metadata (4.1 kB)
+Collecting APScheduler==3.10.4 (from -r requirements.txt (line 10))
+  Downloading APScheduler-3.10.4-py3-none-any.whl.metadata (5.7 kB)
+Collecting Werkzeug==3.0.1 (from -r requirements.txt (line 11))
+  Downloading werkzeug-3.0.1-py3-none-any.whl.metadata (4.1 kB)
+Collecting cryptography==42.0.5 (from -r requirements.txt (line 12))
+  Downloading cryptography-42.0.5-cp39-abi3-manylinux_2_28_x86_64.whl.metadata (5.3 kB)
+Collecting python-telegram-bot==20.7 (from -r requirements.txt (line 13))
+  Downloading python_telegram_bot-20.7-py3-none-any.whl.metadata (15 kB)
+Collecting httpx==0.25.2 (from -r requirements.txt (line 14))
+  Downloading httpx-0.25.2-py3-none-any.whl.metadata (6.9 kB)
+Collecting pyTelegramBotAPI==4.29.1 (from -r requirements.txt (line 15))
+  Downloading pytelegrambotapi-4.29.1-py3-none-any.whl.metadata (48 kB)
+Collecting requests-oauthlib==2.0.0 (from -r requirements.txt (line 16))
+  Downloading requests_oauthlib-2.0.0-py2.py3-none-any.whl.metadata (11 kB)
+Collecting psycopg2-binary==2.9.10 (from -r requirements.txt (line 17))
+  Downloading psycopg2_binary-2.9.10-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.9 kB)
+Collecting langdetect==1.0.9 (from -r requirements.txt (line 18))
+  Downloading langdetect-1.0.9.tar.gz (981 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 981.5/981.5 kB 46.0 MB/s eta 0:00:00
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting pandas==2.3.2 (from -r requirements.txt (line 19))
+  Downloading pandas-2.3.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (91 kB)
+Collecting PyPDF2==3.0.1 (from -r requirements.txt (line 20))
+  Downloading pypdf2-3.0.1-py3-none-any.whl.metadata (6.8 kB)
+Collecting python-docx==1.2.0 (from -r requirements.txt (line 21))
+  Downloading python_docx-1.2.0-py3-none-any.whl.metadata (2.0 kB)
+Collecting openai==1.54.4 (from -r requirements.txt (line 22))
+  Downloading openai-1.54.4-py3-none-any.whl.metadata (24 kB)
+Collecting pymupdf==1.24.7 (from -r requirements.txt (line 23))
+  Downloading PyMuPDF-1.24.7.tar.gz (31.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 31.5/31.5 MB 97.6 MB/s eta 0:00:00
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Installing backend dependencies: started
+  Installing backend dependencies: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): still running...
+  Preparing metadata (pyproject.toml): still running...
+  Preparing metadata (pyproject.toml): still running...
+  Preparing metadata (pyproject.toml): still running...
+  Preparing metadata (pyproject.toml): still running...
+  Preparing metadata (pyproject.toml): still running...
+  Preparing metadata (pyproject.toml): still running...
+  Preparing metadata (pyproject.toml): finished with status 'done'
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))': /simple/python-magic/
+Collecting python-magic==0.4.27 (from -r requirements.txt (line 24))
+  WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))': /packages/6c/73/9f872cb81fc5c3bb48f7227872c28975f998f3e7c2b1c16e95e6432bbb90/python_magic-0.4.27-py2.py3-none-any.whl.metadata
+  Downloading python_magic-0.4.27-py2.py3-none-any.whl.metadata (5.8 kB)
+Collecting Jinja2>=3.1.2 (from Flask==3.0.3->-r requirements.txt (line 1))
+  Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+Collecting itsdangerous>=2.1.2 (from Flask==3.0.3->-r requirements.txt (line 1))
+  Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+Collecting click>=8.1.3 (from Flask==3.0.3->-r requirements.txt (line 1))
+  Downloading click-8.2.1-py3-none-any.whl.metadata (2.5 kB)
+Collecting blinker>=1.6.2 (from Flask==3.0.3->-r requirements.txt (line 1))
+  Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+Collecting sqlalchemy>=1.4.18 (from Flask-SQLAlchemy==3.0.5->-r requirements.txt (line 2))
+  Downloading sqlalchemy-2.0.43-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (9.6 kB)
+Collecting Babel>=2.12 (from Flask-Babel==4.0.0->-r requirements.txt (line 4))
+  Downloading babel-2.17.0-py3-none-any.whl.metadata (2.0 kB)
+Collecting pytz>=2022.7 (from Flask-Babel==4.0.0->-r requirements.txt (line 4))
+  Downloading pytz-2025.2-py2.py3-none-any.whl.metadata (22 kB)
+Collecting google-ai-generativelanguage==0.6.1 (from google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading google_ai_generativelanguage-0.6.1-py3-none-any.whl.metadata (5.2 kB)
+Collecting google-api-core (from google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading google_api_core-2.25.1-py3-none-any.whl.metadata (3.0 kB)
+Collecting google-api-python-client (from google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading google_api_python_client-2.181.0-py3-none-any.whl.metadata (7.0 kB)
+Collecting google-auth>=2.15.0 (from google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading google_auth-2.40.3-py2.py3-none-any.whl.metadata (6.2 kB)
+Collecting protobuf (from google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading protobuf-6.32.1-cp39-abi3-manylinux2014_x86_64.whl.metadata (593 bytes)
+Collecting pydantic (from google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading pydantic-2.11.8-py3-none-any.whl.metadata (68 kB)
+Collecting tqdm (from google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading tqdm-4.67.1-py3-none-any.whl.metadata (57 kB)
+Collecting typing-extensions (from google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting charset-normalizer<4,>=2 (from requests==2.31.0->-r requirements.txt (line 8))
+  Downloading charset_normalizer-3.4.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (36 kB)
+Collecting idna<4,>=2.5 (from requests==2.31.0->-r requirements.txt (line 8))
+  Downloading idna-3.10-py3-none-any.whl.metadata (10 kB)
+Collecting urllib3<3,>=1.21.1 (from requests==2.31.0->-r requirements.txt (line 8))
+  Downloading urllib3-2.5.0-py3-none-any.whl.metadata (6.5 kB)
+Collecting certifi>=2017.4.17 (from requests==2.31.0->-r requirements.txt (line 8))
+  Downloading certifi-2025.8.3-py3-none-any.whl.metadata (2.4 kB)
+Collecting packaging (from gunicorn==21.2.0->-r requirements.txt (line 9))
+  Downloading packaging-25.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting six>=1.4.0 (from APScheduler==3.10.4->-r requirements.txt (line 10))
+  Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting tzlocal!=3.*,>=2.0 (from APScheduler==3.10.4->-r requirements.txt (line 10))
+  Downloading tzlocal-5.3.1-py3-none-any.whl.metadata (7.6 kB)
+Collecting MarkupSafe>=2.1.1 (from Werkzeug==3.0.1->-r requirements.txt (line 11))
+  Downloading MarkupSafe-3.0.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.0 kB)
+Collecting cffi>=1.12 (from cryptography==42.0.5->-r requirements.txt (line 12))
+  Downloading cffi-2.0.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.6 kB)
+Collecting anyio (from httpx==0.25.2->-r requirements.txt (line 14))
+  Downloading anyio-4.10.0-py3-none-any.whl.metadata (4.0 kB)
+Collecting httpcore==1.* (from httpx==0.25.2->-r requirements.txt (line 14))
+  Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Collecting sniffio (from httpx==0.25.2->-r requirements.txt (line 14))
+  Downloading sniffio-1.3.1-py3-none-any.whl.metadata (3.9 kB)
+Collecting oauthlib>=3.0.0 (from requests-oauthlib==2.0.0->-r requirements.txt (line 16))
+  Downloading oauthlib-3.3.1-py3-none-any.whl.metadata (7.9 kB)
+Collecting numpy>=1.26.0 (from pandas==2.3.2->-r requirements.txt (line 19))
+  Downloading numpy-2.3.3-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+Collecting python-dateutil>=2.8.2 (from pandas==2.3.2->-r requirements.txt (line 19))
+  Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+Collecting tzdata>=2022.7 (from pandas==2.3.2->-r requirements.txt (line 19))
+  Downloading tzdata-2025.2-py2.py3-none-any.whl.metadata (1.4 kB)
+Collecting lxml>=3.1.0 (from python-docx==1.2.0->-r requirements.txt (line 21))
+  Downloading lxml-6.0.1-cp313-cp313-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl.metadata (3.8 kB)
+Collecting distro<2,>=1.7.0 (from openai==1.54.4->-r requirements.txt (line 22))
+  Downloading distro-1.9.0-py3-none-any.whl.metadata (6.8 kB)
+Collecting jiter<1,>=0.4.0 (from openai==1.54.4->-r requirements.txt (line 22))
+  Downloading jiter-0.10.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.2 kB)
+Collecting proto-plus<2.0.0dev,>=1.22.3 (from google-ai-generativelanguage==0.6.1->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading proto_plus-1.26.1-py3-none-any.whl.metadata (2.2 kB)
+Collecting protobuf (from google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading protobuf-4.25.8-cp37-abi3-manylinux2014_x86_64.whl.metadata (541 bytes)
+Collecting googleapis-common-protos<2.0.0,>=1.56.2 (from google-api-core->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading googleapis_common_protos-1.70.0-py3-none-any.whl.metadata (9.3 kB)
+Collecting grpcio<2.0.0,>=1.33.2 (from google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,<3.0.0dev,>=1.34.1->google-ai-generativelanguage==0.6.1->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading grpcio-1.74.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (3.8 kB)
+Collecting grpcio-status<2.0.0,>=1.33.2 (from google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,<3.0.0dev,>=1.34.1->google-ai-generativelanguage==0.6.1->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading grpcio_status-1.74.0-py3-none-any.whl.metadata (1.1 kB)
+Collecting cachetools<6.0,>=2.0.0 (from google-auth>=2.15.0->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading cachetools-5.5.2-py3-none-any.whl.metadata (5.4 kB)
+Collecting pyasn1-modules>=0.2.1 (from google-auth>=2.15.0->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading pyasn1_modules-0.4.2-py3-none-any.whl.metadata (3.5 kB)
+Collecting rsa<5,>=3.1.4 (from google-auth>=2.15.0->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading rsa-4.9.1-py3-none-any.whl.metadata (5.6 kB)
+INFO: pip is looking at multiple versions of grpcio-status to determine which version is compatible with other requirements. This could take a while.
+Collecting grpcio-status<2.0.0,>=1.33.2 (from google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,<3.0.0dev,>=1.34.1->google-ai-generativelanguage==0.6.1->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading grpcio_status-1.73.1-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.73.0-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.72.2-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.72.1-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.71.2-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.71.0-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.70.0-py3-none-any.whl.metadata (1.1 kB)
+INFO: pip is still looking at multiple versions of grpcio-status to determine which version is compatible with other requirements. This could take a while.
+  Downloading grpcio_status-1.69.0-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.68.1-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.68.0-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.67.1-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.67.0-py3-none-any.whl.metadata (1.1 kB)
+INFO: This is taking longer than usual. You might need to provide the dependency resolver with stricter constraints to reduce runtime. See https://pip.pypa.io/warnings/backtracking for guidance. If you want to abort this run, press Ctrl + C.
+  Downloading grpcio_status-1.66.2-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.66.1-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.66.0-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.65.5-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.65.4-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.65.2-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.65.1-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.64.3-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.64.1-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.64.0-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.63.2-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.63.0-py3-none-any.whl.metadata (1.1 kB)
+  Downloading grpcio_status-1.62.3-py3-none-any.whl.metadata (1.3 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx==0.25.2->-r requirements.txt (line 14))
+  Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting annotated-types>=0.6.0 (from pydantic->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.33.2 (from pydantic->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading pydantic_core-2.33.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.8 kB)
+Collecting typing-inspection>=0.4.0 (from pydantic->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading typing_inspection-0.4.1-py3-none-any.whl.metadata (2.6 kB)
+Collecting pyasn1>=0.1.3 (from rsa<5,>=3.1.4->google-auth>=2.15.0->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading pyasn1-0.6.1-py3-none-any.whl.metadata (8.4 kB)
+Collecting pycparser (from cffi>=1.12->cryptography==42.0.5->-r requirements.txt (line 12))
+  Downloading pycparser-2.23-py3-none-any.whl.metadata (993 bytes)
+Collecting greenlet>=1 (from sqlalchemy>=1.4.18->Flask-SQLAlchemy==3.0.5->-r requirements.txt (line 2))
+  Downloading greenlet-3.2.4-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (4.1 kB)
+Collecting httplib2<1.0.0,>=0.19.0 (from google-api-python-client->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading httplib2-0.31.0-py3-none-any.whl.metadata (2.2 kB)
+Collecting google-auth-httplib2<1.0.0,>=0.2.0 (from google-api-python-client->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading google_auth_httplib2-0.2.0-py2.py3-none-any.whl.metadata (2.2 kB)
+Collecting uritemplate<5,>=3.0.1 (from google-api-python-client->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading uritemplate-4.2.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting pyparsing<4,>=3.0.4 (from httplib2<1.0.0,>=0.19.0->google-api-python-client->google-generativeai==0.5.0->-r requirements.txt (line 6))
+  Downloading pyparsing-3.2.3-py3-none-any.whl.metadata (5.0 kB)
+Downloading flask-3.0.3-py3-none-any.whl (101 kB)
+Downloading flask_sqlalchemy-3.0.5-py3-none-any.whl (24 kB)
+Downloading Flask_Login-0.6.3-py3-none-any.whl (17 kB)
+Downloading flask_babel-4.0.0-py3-none-any.whl (9.6 kB)
+Downloading flask_mail-0.10.0-py3-none-any.whl (8.5 kB)
+Downloading google_generativeai-0.5.0-py3-none-any.whl (142 kB)
+Downloading python_dotenv-1.0.0-py3-none-any.whl (19 kB)
+Downloading requests-2.31.0-py3-none-any.whl (62 kB)
+Downloading gunicorn-21.2.0-py3-none-any.whl (80 kB)
+Downloading APScheduler-3.10.4-py3-none-any.whl (59 kB)
+Downloading werkzeug-3.0.1-py3-none-any.whl (226 kB)
+Downloading cryptography-42.0.5-cp39-abi3-manylinux_2_28_x86_64.whl (4.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.6/4.6 MB 137.8 MB/s eta 0:00:00
+Downloading python_telegram_bot-20.7-py3-none-any.whl (552 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 552.6/552.6 kB 43.2 MB/s eta 0:00:00
+Downloading httpx-0.25.2-py3-none-any.whl (74 kB)
+Downloading pytelegrambotapi-4.29.1-py3-none-any.whl (294 kB)
+Downloading requests_oauthlib-2.0.0-py2.py3-none-any.whl (24 kB)
+Downloading psycopg2_binary-2.9.10-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.0/3.0 MB 155.6 MB/s eta 0:00:00
+Downloading pandas-2.3.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (12.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.1/12.1 MB 138.8 MB/s eta 0:00:00
+Downloading pypdf2-3.0.1-py3-none-any.whl (232 kB)
+Downloading python_docx-1.2.0-py3-none-any.whl (252 kB)
+Downloading openai-1.54.4-py3-none-any.whl (389 kB)
+Downloading python_magic-0.4.27-py2.py3-none-any.whl (13 kB)
+Downloading google_ai_generativelanguage-0.6.1-py3-none-any.whl (663 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 663.6/663.6 kB 50.7 MB/s eta 0:00:00
+Downloading anyio-4.10.0-py3-none-any.whl (107 kB)
+Downloading charset_normalizer-3.4.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (151 kB)
+Downloading distro-1.9.0-py3-none-any.whl (20 kB)
+Downloading google_api_core-2.25.1-py3-none-any.whl (160 kB)
+Downloading google_auth-2.40.3-py2.py3-none-any.whl (216 kB)
+Downloading cachetools-5.5.2-py3-none-any.whl (10 kB)
+Downloading googleapis_common_protos-1.70.0-py3-none-any.whl (294 kB)
+Downloading grpcio-1.74.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (6.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.2/6.2 MB 123.5 MB/s eta 0:00:00
+Downloading grpcio_status-1.62.3-py3-none-any.whl (14 kB)
+Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+Downloading idna-3.10-py3-none-any.whl (70 kB)
+Downloading jiter-0.10.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (350 kB)
+Downloading proto_plus-1.26.1-py3-none-any.whl (50 kB)
+Downloading protobuf-4.25.8-cp37-abi3-manylinux2014_x86_64.whl (294 kB)
+Downloading pydantic-2.11.8-py3-none-any.whl (444 kB)
+Downloading pydantic_core-2.33.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 138.5 MB/s eta 0:00:00
+Downloading rsa-4.9.1-py3-none-any.whl (34 kB)
+Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+Downloading urllib3-2.5.0-py3-none-any.whl (129 kB)
+Downloading annotated_types-0.7.0-py3-none-any.whl (13 kB)
+Downloading babel-2.17.0-py3-none-any.whl (10.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.2/10.2 MB 158.5 MB/s eta 0:00:00
+Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+Downloading certifi-2025.8.3-py3-none-any.whl (161 kB)
+Downloading cffi-2.0.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (219 kB)
+Downloading click-8.2.1-py3-none-any.whl (102 kB)
+Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+Downloading lxml-6.0.1-cp313-cp313-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl (5.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.2/5.2 MB 142.4 MB/s eta 0:00:00
+Downloading MarkupSafe-3.0.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (23 kB)
+Downloading numpy-2.3.3-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 140.0 MB/s eta 0:00:00
+Downloading oauthlib-3.3.1-py3-none-any.whl (160 kB)
+Downloading pyasn1-0.6.1-py3-none-any.whl (83 kB)
+Downloading pyasn1_modules-0.4.2-py3-none-any.whl (181 kB)
+Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Downloading pytz-2025.2-py2.py3-none-any.whl (509 kB)
+Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+Downloading sniffio-1.3.1-py3-none-any.whl (10 kB)
+Downloading sqlalchemy-2.0.43-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.3/3.3 MB 149.9 MB/s eta 0:00:00
+Downloading greenlet-3.2.4-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (610 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 610.5/610.5 kB 43.3 MB/s eta 0:00:00
+Downloading tqdm-4.67.1-py3-none-any.whl (78 kB)
+Downloading typing_inspection-0.4.1-py3-none-any.whl (14 kB)
+Downloading tzdata-2025.2-py2.py3-none-any.whl (347 kB)
+Downloading tzlocal-5.3.1-py3-none-any.whl (18 kB)
+Downloading google_api_python_client-2.181.0-py3-none-any.whl (14.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 14.1/14.1 MB 158.8 MB/s eta 0:00:00
+Downloading google_auth_httplib2-0.2.0-py2.py3-none-any.whl (9.3 kB)
+Downloading httplib2-0.31.0-py3-none-any.whl (91 kB)
+Downloading pyparsing-3.2.3-py3-none-any.whl (111 kB)
+Downloading uritemplate-4.2.0-py3-none-any.whl (11 kB)
+Downloading packaging-25.0-py3-none-any.whl (66 kB)
+Downloading pycparser-2.23-py3-none-any.whl (118 kB)
+Building wheels for collected packages: langdetect, pymupdf
+  Building wheel for langdetect (pyproject.toml): started
+  Building wheel for langdetect (pyproject.toml): finished with status 'done'
+  Created wheel for langdetect: filename=langdetect-1.0.9-py3-none-any.whl size=993332 sha256=f9a970dd78de283ed5d57f886c6ebb3c725f20fe8d3ef595d375efe17690fa80
+  Stored in directory: /opt/render/.cache/wheels/eb/87/25/2dddf1c94e1786054e25022ec5530bfed52bad86d882999c48
+  Building wheel for pymupdf (pyproject.toml): started
+  Building wheel for pymupdf (pyproject.toml): finished with status 'done'
+  Created wheel for pymupdf: filename=PyMuPDF-1.24.7-cp313-none-linux_x86_64.whl size=19170792 sha256=6bc3d6224557c70c761b38c148d957c3598197a986bacc65d2b03d002cdb8ac2
+  Stored in directory: /opt/render/.cache/wheels/9a/1b/bd/926329c097147bf8c3cee7d83358959b8940bbb7a4da1889ff
+Successfully built langdetect pymupdf
+Installing collected packages: pytz, urllib3, uritemplate, tzlocal, tzdata, typing-extensions, tqdm, sniffio, six, python-magic, python-dotenv, PyPDF2, pyparsing, pymupdf, pycparser, pyasn1, psycopg2-binary, protobuf, packaging, oauthlib, numpy, MarkupSafe, lxml, jiter, itsdangerous, idna, h11, grpcio, greenlet, distro, click, charset-normalizer, certifi, cachetools, blinker, Babel, annotated-types, Werkzeug, typing-inspection, sqlalchemy, rsa, requests, python-docx, python-dateutil, pydantic-core, pyasn1-modules, proto-plus, langdetect, Jinja2, httplib2, httpcore, gunicorn, googleapis-common-protos, cffi, APScheduler, anyio, requests-oauthlib, pyTelegramBotAPI, pydantic, pandas, httpx, grpcio-status, google-auth, Flask, cryptography, python-telegram-bot, openai, google-auth-httplib2, google-api-core, Flask-SQLAlchemy, Flask-Mail, Flask-Login, Flask-Babel, google-api-python-client, google-ai-generativelanguage, google-generativeai
+Successfully installed APScheduler-3.10.4 Babel-2.17.0 Flask-3.0.3 Flask-Babel-4.0.0 Flask-Login-0.6.3 Flask-Mail-0.10.0 Flask-SQLAlchemy-3.0.5 Jinja2-3.1.6 MarkupSafe-3.0.2 PyPDF2-3.0.1 Werkzeug-3.0.1 annotated-types-0.7.0 anyio-4.10.0 blinker-1.9.0 cachetools-5.5.2 certifi-2025.8.3 cffi-2.0.0 charset-normalizer-3.4.3 click-8.2.1 cryptography-42.0.5 distro-1.9.0 google-ai-generativelanguage-0.6.1 google-api-core-2.25.1 google-api-python-client-2.181.0 google-auth-2.40.3 google-auth-httplib2-0.2.0 google-generativeai-0.5.0 googleapis-common-protos-1.70.0 greenlet-3.2.4 grpcio-1.74.0 grpcio-status-1.62.3 gunicorn-21.2.0 h11-0.16.0 httpcore-1.0.9 httplib2-0.31.0 httpx-0.25.2 idna-3.10 itsdangerous-2.2.0 jiter-0.10.0 langdetect-1.0.9 lxml-6.0.1 numpy-2.3.3 oauthlib-3.3.1 openai-1.54.4 packaging-25.0 pandas-2.3.2 proto-plus-1.26.1 protobuf-4.25.8 psycopg2-binary-2.9.10 pyTelegramBotAPI-4.29.1 pyasn1-0.6.1 pyasn1-modules-0.4.2 pycparser-2.23 pydantic-2.11.8 pydantic-core-2.33.2 pymupdf-1.24.7 pyparsing-3.2.3 python-dateutil-2.9.0.post0 python-docx-1.2.0 python-dotenv-1.0.0 python-magic-0.4.27 python-telegram-bot-20.7 pytz-2025.2 requests-2.31.0 requests-oauthlib-2.0.0 rsa-4.9.1 six-1.17.0 sniffio-1.3.1 sqlalchemy-2.0.43 tqdm-4.67.1 typing-extensions-4.15.0 typing-inspection-0.4.1 tzdata-2025.2 tzlocal-5.3.1 uritemplate-4.2.0 urllib3-2.5.0
+[notice] A new release of pip is available: 25.1.1 -> 25.2
+[notice] To update, run: pip install --upgrade pip
+==> Uploading build...
+==> Uploaded in 8.0s. Compression took 2.5s
+==> Build successful 🎉
+==> Deploying...
+==> Running 'gunicorn -c gunicorn.conf.py wsgi:app'
+[2025-09-13 04:52:18 +0000] [56] [INFO] Starting gunicorn 21.2.0
+[2025-09-13 04:52:18 +0000] [56] [INFO] Listening at: http://0.0.0.0:10000 (56)
+[2025-09-13 04:52:18 +0000] [56] [INFO] Using worker: gthread
+[2025-09-13 04:52:18 +0000] [58] [INFO] Booting worker with pid: 58
+[2025-09-13 04:52:18 +0000] [59] [INFO] Booting worker with pid: 59
+[2025-09-13 04:52:18 +0000] [60] [INFO] Booting worker with pid: 60
+[2025-09-13 04:52:18 +0000] [61] [INFO] Booting worker with pid: 61
+Database setup error: Could not parse SQLAlchemy URL from given URL string
+Main routes registered successfully!
+Auth routes registered successfully!
+Dashboard routes registered successfully!
+Admin routes registered successfully!
+API Webhooks routes registered successfully!
+Messaging routes registered successfully!
+Production environment validated successfully!
+Flask app created successfully!
+127.0.0.1 - - [13/Sep/2025:04:52:19 +0000] "HEAD / HTTP/1.1" 200 0 "-" "Go-http-client/1.1"
+==> Your service is live 🎉
+==> 
+==> ///////////////////////////////////////////////////////////
+==> 
+==> Available at your primary URL https://chatbotplatform.onrender.com
+==> 
+==> ///////////////////////////////////////////////////////////
+127.0.0.1 - - [13/Sep/2025:04:52:27 +0000] "GET / HTTP/1.1" 200 4779 "-" "Go-http-client/2.0"
