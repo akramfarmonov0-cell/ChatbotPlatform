@@ -18,16 +18,15 @@ def init_default_data():
         
         if not admin_user:
             print("👤 Creating admin user...")
-            admin_user = User(
-                id=str(uuid.uuid4()),
-                full_name='Admin User',
-                phone='+998901234567',
-                password_hash=generate_password_hash('admin123'),
-                is_admin=True,
-                is_active=True,
-                is_trial=False,
-                created_at=datetime.utcnow()
-            )
+            admin_user = User()
+            admin_user.id = str(uuid.uuid4())
+            admin_user.full_name = 'Admin User'
+            admin_user.phone = '+998901234567'
+            admin_user.password_hash = generate_password_hash('admin123')
+            admin_user.is_admin = True
+            admin_user.is_active = True
+            admin_user.is_trial = False
+            admin_user.created_at = datetime.utcnow()
             db.session.add(admin_user)
             print("✅ Admin user created: +998901234567 / admin123")
         
@@ -49,7 +48,7 @@ def create_app():
     # Flask-Login setup
     login_manager = LoginManager()
     login_manager.init_app(app)
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'auth.login'  # type: ignore
     login_manager.login_message = 'Iltimos, avval tizimga kiring.'
     
     @login_manager.user_loader

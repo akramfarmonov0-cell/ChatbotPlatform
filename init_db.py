@@ -17,7 +17,7 @@ def init_database():
     try:
         from app import create_app
         from models.user import User, db
-        from models.system_stats import SystemStats
+        from models.admin_log import SystemStats
         
         app = create_app()
         
@@ -35,16 +35,15 @@ def init_database():
                 print("👤 Creating admin user...")
                 
                 # Create admin user
-                admin_user = User(
-                    id=str(uuid.uuid4()),
-                    full_name='Admin User',
-                    phone='+998901234567',
-                    password_hash=generate_password_hash('admin123'),
-                    is_admin=True,
-                    is_active=True,
-                    is_trial=False,
-                    created_at=datetime.utcnow()
-                )
+                admin_user = User()
+                admin_user.id = str(uuid.uuid4())
+                admin_user.full_name = 'Admin User'
+                admin_user.phone = '+998901234567'
+                admin_user.password_hash = generate_password_hash('admin123')
+                admin_user.is_admin = True
+                admin_user.is_active = True
+                admin_user.is_trial = False
+                admin_user.created_at = datetime.utcnow()
                 
                 db.session.add(admin_user)
                 print("✅ Admin user created: +998901234567 / admin123")
@@ -58,17 +57,16 @@ def init_database():
                 print("👤 Creating test user...")
                 
                 # Create test user
-                test_user = User(
-                    id=str(uuid.uuid4()),
-                    full_name='Test User',
-                    phone='+998986558747',
-                    password_hash=generate_password_hash('admin123'),
-                    is_admin=False,
-                    is_active=True,
-                    is_trial=True,
-                    trial_end_date=datetime.utcnow() + timedelta(days=30),
-                    created_at=datetime.utcnow()
-                )
+                test_user = User()
+                test_user.id = str(uuid.uuid4())
+                test_user.full_name = 'Test User'
+                test_user.phone = '+998986558747'
+                test_user.password_hash = generate_password_hash('admin123')
+                test_user.is_admin = False
+                test_user.is_active = True
+                test_user.is_trial = True
+                test_user.trial_end_date = datetime.utcnow() + timedelta(days=30)
+                test_user.created_at = datetime.utcnow()
                 
                 db.session.add(test_user)
                 print("✅ Test user created: +998986558747 / admin123")
