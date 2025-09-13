@@ -360,24 +360,30 @@ def toggle_platform(platform_id):
             bot = TelegramBot.query.filter_by(id=bot_id, user_id=user.id).first()
             if bot:
                 if activate:
-                    # Bot faollashtirilganda webhook avtomatik o'rnatish
-                    from utils.messaging.telegram import TelegramHandler
-                    from flask import current_app
-                    
-                    # Generate webhook URL
-                    webhook_url = f"https://{current_app.config.get('REPLIT_DEV_DOMAIN', 'localhost:5000')}/telegram/webhook/{user.id}"
-                    
-                    # Set webhook via Telegram API
-                    bot_token = bot.get_token()
-                    success, message = TelegramHandler.set_webhook(bot_token, webhook_url)
-                    
-                    if success:
-                        bot.webhook_url = webhook_url
+                    # Replit da webhook ishlamaydi, faqat botni faollashtirish
+                    if current_app.config.get('IS_REPLIT', False):
                         bot.is_active = True
                         db.session.commit()
-                        return jsonify({'success': True, 'message': 'Bot faollashtirildi va webhook sozlandi'})
+                        return jsonify({'success': True, 'message': 'Bot faollashtirildi (Replit muhitida webhook o\'rnatish mumkin emas)'})
                     else:
-                        return jsonify({'success': False, 'error': f'Webhook xatosi: {message}'}), 500
+                        # Bot faollashtirilganda webhook avtomatik o'rnatish (production da)
+                        from utils.messaging.telegram import TelegramHandler
+                        from flask import current_app
+                        
+                        # Generate webhook URL
+                        webhook_url = f"https://{current_app.config.get('REPLIT_DEV_DOMAIN', 'localhost:5000')}/telegram/webhook/{user.id}"
+                        
+                        # Set webhook via Telegram API
+                        bot_token = bot.get_token()
+                        success, message = TelegramHandler.set_webhook(bot_token, webhook_url)
+                        
+                        if success:
+                            bot.webhook_url = webhook_url
+                            bot.is_active = True
+                            db.session.commit()
+                            return jsonify({'success': True, 'message': 'Bot faollashtirildi va webhook sozlandi'})
+                        else:
+                            return jsonify({'success': False, 'error': f'Webhook xatosi: {message}'}), 500
                 else:
                     # Bot nofaol qilish
                     bot.is_active = False
