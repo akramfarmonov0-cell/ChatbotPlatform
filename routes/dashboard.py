@@ -1,7 +1,7 @@
 """
 Foydalanuvchi dashboard routes
 """
-from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
+from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for, current_app
 from models.user import User, db
 from models.conversation import Conversation, Message
 from models.knowledge_base import KnowledgeBase
@@ -368,7 +368,6 @@ def toggle_platform(platform_id):
                     else:
                         # Bot faollashtirilganda webhook avtomatik o'rnatish (production da)
                         from utils.messaging.telegram import TelegramHandler
-                        from flask import current_app
                         
                         # Generate webhook URL
                         webhook_url = f"https://{current_app.config.get('REPLIT_DEV_DOMAIN', 'localhost:5000')}/telegram/webhook/{user.id}"
