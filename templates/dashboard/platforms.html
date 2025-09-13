@@ -46,15 +46,15 @@
                             </p>
                             
                             <div class="d-flex justify-content-between">
-                                <button class="btn btn-sm btn-outline-primary" onclick="configurePlatform({{ platform.id }})">
+                                <button class="btn btn-sm btn-outline-primary" onclick="configurePlatform('{{ platform.id }}')">
                                     <i class="fas fa-cog"></i> Sozlash
                                 </button>
                                 {% if platform.is_active %}
-                                    <button class="btn btn-sm btn-outline-warning" onclick="togglePlatform({{ platform.id }}, false)">
+                                    <button class="btn btn-sm btn-outline-warning" onclick="togglePlatform('{{ platform.id }}', false)">
                                         <i class="fas fa-pause"></i> To'xtatish
                                     </button>
                                 {% else %}
-                                    <button class="btn btn-sm btn-outline-success" onclick="togglePlatform({{ platform.id }}, true)">
+                                    <button class="btn btn-sm btn-outline-success" onclick="togglePlatform('{{ platform.id }}', true)">
                                         <i class="fas fa-play"></i> Ishga tushirish
                                     </button>
                                 {% endif %}

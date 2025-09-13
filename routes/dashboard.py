@@ -342,6 +342,81 @@ def messaging_platforms():
                          user=user,
                          platforms=platforms)
 
+@dashboard_bp.route('/platforms/<platform_id>/toggle', methods=['POST'])
+@login_required
+def toggle_platform(platform_id):
+    """Platform faol/nofaol holatini o'zgartirish"""
+    try:
+        data = request.get_json()
+        activate = data.get('active', False)
+        
+        # Platform turi va ID ni ajratish
+        platform_type, bot_id = platform_id.split('_', 1)
+        bot_id = int(bot_id)
+        
+        user = User.query.get(session['user_id'])
+        
+        if platform_type == 'telegram':
+            bot = TelegramBot.query.filter_by(id=bot_id, user_id=user.id).first()
+            if bot:
+                bot.is_active = activate
+                db.session.commit()
+                return jsonify({'success': True, 'message': 'Status o\'zgartirildi'})
+                
+        elif platform_type == 'whatsapp':
+            account = WhatsAppAccount.query.filter_by(id=bot_id, user_id=user.id).first()
+            if account:
+                account.is_active = activate
+                db.session.commit()
+                return jsonify({'success': True, 'message': 'Status o\'zgartirildi'})
+                
+        elif platform_type == 'instagram':
+            account = InstagramAccount.query.filter_by(id=bot_id, user_id=user.id).first()
+            if account:
+                account.is_active = activate
+                db.session.commit()
+                return jsonify({'success': True, 'message': 'Status o\'zgartirildi'})
+        
+        return jsonify({'success': False, 'error': 'Platform topilmadi'}), 404
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': 'Xato yuz berdi'}), 500
+
+@dashboard_bp.route('/platforms/<platform_id>/config')
+@login_required  
+def configure_platform(platform_id):
+    """Platform sozlamalari sahifasi"""
+    try:
+        # Platform turi va ID ni ajratish
+        platform_type, bot_id = platform_id.split('_', 1)
+        bot_id = int(bot_id)
+        
+        user = User.query.get(session['user_id'])
+        
+        if platform_type == 'telegram':
+            bot = TelegramBot.query.filter_by(id=bot_id, user_id=user.id).first()
+            if bot:
+                return render_template('dashboard/telegram_config.html', 
+                                     user=user, bot=bot)
+                                     
+        elif platform_type == 'whatsapp':
+            account = WhatsAppAccount.query.filter_by(id=bot_id, user_id=user.id).first()
+            if account:
+                return render_template('dashboard/whatsapp_config.html', 
+                                     user=user, account=account)
+                                     
+        elif platform_type == 'instagram':
+            account = InstagramAccount.query.filter_by(id=bot_id, user_id=user.id).first()
+            if account:
+                return render_template('dashboard/instagram_config.html', 
+                                     user=user, account=account)
+        
+        return redirect(url_for('dashboard.messaging_platforms'))
+        
+    except Exception as e:
+        return redirect(url_for('dashboard.messaging_platforms'))
+
 @dashboard_bp.route('/settings')
 @login_required
 def settings():
