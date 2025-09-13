@@ -1,10 +1,10 @@
-from flask import Blueprint, request, jsonify, current_app
-from flask_login import login_required, current_user
+from flask import Blueprint, request, jsonify, current_app, session, redirect, url_for
 from models.messaging import TelegramBot, WhatsAppAccount, InstagramAccount
-from models.user import db
+from models.user import User, db
 from utils.messaging.telegram import TelegramHandler
 from utils.messaging.whatsapp import WhatsAppHandler
 from utils.messaging.instagram import InstagramHandler
+from functools import wraps
 import logging
 
 messaging_bp = Blueprint('messaging', __name__, url_prefix='/')
@@ -12,6 +12,26 @@ messaging_bp = Blueprint('messaging', __name__, url_prefix='/')
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def login_required(f):
+    """Login talab qiluvchi decorator"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            if request.is_json:
+                return jsonify({'success': False, 'error': 'Tizimga kirish talab qilinadi'}), 401
+            return redirect(url_for('auth.login'))
+        
+        # Foydalanuvchi mavjudligini tekshirish
+        user = User.query.get(session['user_id'])
+        if not user or not user.is_active:
+            session.clear()
+            if request.is_json:
+                return jsonify({'success': False, 'error': 'Foydalanuvchi topilmadi'}), 401
+            return redirect(url_for('auth.login'))
+        
+        return f(*args, **kwargs)
+    return decorated_function
 
 # ===== TELEGRAM WEBHOOK ROUTES =====
 
@@ -315,9 +335,12 @@ def save_telegram_bot():
         if not bot_name or not bot_token:
             return jsonify({'error': 'Bot name and token required'}), 400
         
+        # Get current user from session
+        user = User.query.get(session['user_id'])
+        
         # Create new bot
         bot = TelegramBot(
-            user_id=current_user.id,
+            user_id=user.id,
             bot_name=bot_name
         )
         bot.set_token(bot_token)
@@ -347,9 +370,12 @@ def save_whatsapp_account():
         if not all([business_name, app_id, app_secret, verify_token, phone_number_id]):
             return jsonify({'error': 'All fields are required'}), 400
         
+        # Get current user from session
+        user = User.query.get(session['user_id'])
+        
         # Create new account
         account = WhatsAppAccount(
-            user_id=current_user.id,
+            user_id=user.id,
             business_name=business_name,
             phone_number_id=phone_number_id
         )
@@ -378,9 +404,12 @@ def save_instagram_account():
         if not all([account_name, access_token, page_id]):
             return jsonify({'error': 'All fields are required'}), 400
         
+        # Get current user from session
+        user = User.query.get(session['user_id'])
+        
         # Create new account
         account = InstagramAccount(
-            user_id=current_user.id,
+            user_id=user.id,
             account_name=account_name,
             page_id=page_id
         )
