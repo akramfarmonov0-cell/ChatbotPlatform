@@ -6,6 +6,9 @@ load_dotenv()
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-for-development-only')
     
+    # AI Service configuration
+    GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+    
     # Normalize DATABASE_URL for SQLAlchemy 2.x compatibility
     database_url = os.getenv('DATABASE_URL', 'sqlite:///app.db')
     if database_url.startswith('postgres://'):
