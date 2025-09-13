@@ -5,6 +5,9 @@ from models.messaging import TelegramBot, TelegramConversation
 from models.user import db
 from utils.ai_handler import get_ai_response
 import os
+import time
+import threading
+import logging
 
 class TelegramHandler:
     """Handle Telegram Bot API operations"""
@@ -116,6 +119,32 @@ class TelegramHandler:
             db.session.rollback()
             return False, f"Error processing update: {str(e)}"
     
+    @staticmethod
+    def get_updates(bot_token, offset=0, timeout=10):
+        """Get updates from Telegram using long polling"""
+        try:
+            api_url = f"{current_app.config['TELEGRAM_API_URL']}{bot_token}/getUpdates"
+            
+            data = {
+                'offset': offset,
+                'timeout': timeout,
+                'limit': 100
+            }
+            
+            response = requests.post(api_url, json=data, timeout=timeout + 5)
+            response.raise_for_status()
+            
+            result = response.json()
+            if result.get('ok'):
+                return True, result.get('result', [])
+            else:
+                return False, result.get('description', 'Unknown error')
+                
+        except requests.exceptions.RequestException as e:
+            return False, f"Network error: {str(e)}"
+        except Exception as e:
+            return False, f"Error: {str(e)}"
+
     @staticmethod
     def validate_bot_token(bot_token):
         """Validate Telegram bot token by calling getMe API"""

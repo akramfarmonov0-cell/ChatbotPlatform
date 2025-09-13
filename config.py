@@ -19,8 +19,17 @@ class Config:
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
     LANGUAGES = ['uz', 'ru', 'en']
     
-    # Multi-channel bot integration settings
-    WEBHOOK_BASE_URL = os.getenv('WEBHOOK_BASE_URL', 'https://your-repl-name.repl.co')
+    # Multi-channel bot integration settings - Auto-detect URL for production
+    if os.environ.get('RENDER_SERVICE_NAME'):
+        # Render.com deployment
+        WEBHOOK_BASE_URL = f"https://{os.environ.get('RENDER_SERVICE_NAME')}.onrender.com"
+    elif os.environ.get('REPLIT_DEV_DOMAIN'):
+        # Replit development
+        WEBHOOK_BASE_URL = f"https://{os.environ.get('REPLIT_DEV_DOMAIN')}"
+    else:
+        # Manual override or fallback
+        WEBHOOK_BASE_URL = os.getenv('WEBHOOK_BASE_URL', 'https://localhost:5000')
+    
     ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY')  # Fernet encryption key
     
     # Telegram Bot API settings
@@ -34,6 +43,7 @@ class Config:
     
     # Platform detection (Replit vs Production)
     IS_REPLIT = bool(os.environ.get('REPLIT_DEV_DOMAIN')) or bool(os.environ.get('REPL_ID'))
+    IS_PRODUCTION = os.environ.get('RENDER') or os.environ.get('FLASK_ENV') == 'production'
     
     # Validate critical environment variables
     @classmethod
