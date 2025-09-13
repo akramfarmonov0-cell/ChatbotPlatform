@@ -1,4 +1,5 @@
-from flask import Blueprint, request, jsonify, current_app, session, redirect, url_for
+from flask import Blueprint, request, jsonify, current_app, session, redirect, url_for, render_template
+from flask_login import current_user
 from models.messaging import TelegramBot, WhatsAppAccount, InstagramAccount
 from models.user import User, db
 from utils.messaging.telegram import TelegramHandler
@@ -32,6 +33,14 @@ def login_required(f):
         
         return f(*args, **kwargs)
     return decorated_function
+
+# ===== MAIN REDIRECT ROUTE =====
+
+@messaging_bp.route('/messaging')
+@login_required
+def messaging_redirect():
+    """Messaging sahifasidan dashboard/platforms ga yo'naltirish"""
+    return redirect(url_for('dashboard.messaging_platforms'))
 
 # ===== TELEGRAM WEBHOOK ROUTES =====
 
