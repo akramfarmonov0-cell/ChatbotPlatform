@@ -60,8 +60,14 @@ class TelegramBot(db.Model):
     def get_token(self):
         """Decrypt and return telegram bot token."""
         if current_app.config.get('ENCRYPTION_KEY'):
-            fernet = Fernet(current_app.config['ENCRYPTION_KEY'].encode())
-            return fernet.decrypt(self.encrypted_token.encode()).decode()
+            try:
+                # Try Fernet decryption first (for new tokens)
+                fernet = Fernet(current_app.config['ENCRYPTION_KEY'].encode())
+                return fernet.decrypt(self.encrypted_token.encode()).decode()
+            except Exception:
+                # Fallback to base64 for old tokens created without ENCRYPTION_KEY
+                import base64
+                return base64.b64decode(self.encrypted_token.encode()).decode()
         else:
             # Fallback for development
             import base64
